@@ -1,3 +1,7 @@
-# Project Hotel California [ALA]
+# Hotel California
 
-Fourth ALA projects which I will be making a reservation system for a hotel, the code will be PHP/OOP. 
+* Fourth ALA project. 
+* This project will be a **reservation website**.
+* The code must be in **Object-Orientated PHP**.
+* The project must make use of **PHP Data Objects**.
+* The deadline for this project is the **26th of June 2020**.
