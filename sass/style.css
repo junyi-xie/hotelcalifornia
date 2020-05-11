@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#home {
+  height: 400px;
+}
+
+.interior {
+  height: 400px;
+}
+
+.amenities {
+  height: 400px;
+}
+
+.rooms {
+  height: 400px;
+}
+
+.contact {
+  height: 400px;
+}
+/*# sourceMappingURL=style.css.map */
