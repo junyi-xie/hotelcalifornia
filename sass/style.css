@@ -15,19 +15,19 @@ body {
   height: 400px;
 }
 
-.interior {
+#interior {
   height: 400px;
 }
 
-.amenities {
+#amenities {
   height: 400px;
 }
 
-.rooms {
+#rooms {
   height: 400px;
 }
 
-.contact {
+#contact {
   height: 400px;
 }
 /*# sourceMappingURL=style.css.map */
