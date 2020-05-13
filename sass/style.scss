@@ -6,33 +6,36 @@
 
 * {
     margin: 0;
-    padding: 0; 
+    padding: 0;
+    box-sizing: border-box; 
 }
 
 html,
 body {
     scroll-behavior: smooth;
-    box-sizing: border-box;
 }
 
-$height : 400px;
+$height : 100vh;
+$height2 : 400px;
+$width : 100%;
 
 #home {
+    width: $width;
     height: $height;
 }
 
 #interior {
-    height: $height;
+    height: $height2;
 }
 
 #amenities {
-    height: $height;
+    height: $height2;
 }
 
 #rooms {
-    height: $height;
+    height: $height2;
 }
 
 #contact {
-    height: $height;
+    height: $height2;
 }
