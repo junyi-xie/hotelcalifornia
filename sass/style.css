@@ -17,18 +17,18 @@ body {
 }
 
 #interior {
-  height: 400px;
+  height: 100vh;
 }
 
 #amenities {
-  height: 400px;
+  height: 100vh;
 }
 
 #rooms {
-  height: 400px;
+  height: 100vh;
 }
 
 #contact {
-  height: 400px;
+  height: 100vh;
 }
 /*# sourceMappingURL=style.css.map */

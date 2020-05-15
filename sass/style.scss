@@ -16,7 +16,6 @@ body {
 }
 
 $height : 100vh;
-$height2 : 400px;
 $width : 100%;
 
 #home {
@@ -25,17 +24,17 @@ $width : 100%;
 }
 
 #interior {
-    height: $height2;
+    height: $height;
 }
 
 #amenities {
-    height: $height2;
+    height: $height;
 }
 
 #rooms {
-    height: $height2;
+    height: $height;
 }
 
 #contact {
-    height: $height2;
+    height: $height;
 }
