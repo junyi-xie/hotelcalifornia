@@ -1,3 +1,3 @@
 <?php
 
-require '../db/db.class.php';
+require '../db.class.php';
