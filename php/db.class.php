@@ -1,6 +1,5 @@
 <?php
 class Database
-
 {
     protected $hostname;
 
@@ -42,5 +41,26 @@ class Database
     {
         $this->pdo = null;
         return true;
+    }
+
+    public function login($username, $password)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name=:username");
+        $stmt->execute(array(':username'=>$username));
+        $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($stmt->rowCount() > 0) {
+            if(password_verify($password, $userRow['user_password']))
+            {
+                $_SESSION['user_session'] = $userRow['id'];
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function redirect($url)
+    {
+        header("Location: $url");
     }
 }
