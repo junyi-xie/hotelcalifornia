@@ -1,5 +1,6 @@
 <?php
 class Database
+
 {
     protected $hostname;
 
@@ -13,12 +14,12 @@ class Database
 
     public $pdo;
 
-    public function __construct($user, $pass, $db, $host)
+    public function __construct($host, $user, $pass, $db)
     {
         $this->hostname = $host;
-        $this->dbname = $db;
-        $this->password = $pass;
         $this->username = $user;
+        $this->password = $pass;
+        $this->dbname = $db;
         $this->connect();
     }
     
@@ -43,4 +44,3 @@ class Database
         return true;
     }
 }
-
