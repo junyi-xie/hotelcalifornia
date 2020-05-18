@@ -43,24 +43,23 @@ class Database
         return true;
     }
 
-    public function login($username, $password)
+    public function user($name, $email)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name=:username");
-        $stmt->execute(array(':username'=>$username));
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($stmt->rowCount() > 0) {
-            if(password_verify($password, $user['user_password']))
-            {
-                $_SESSION['user_session'] = $user['id'];
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE name=:name OR email=:email LIMIT 1");
+        $stmt->execute(array(':name'=>$name, ':email'=>$email));
+       
+        $query = $this->pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
+        $query->bindParam(':name', $name);
+        $query->bindParam(':email', $email);
 
-    public function redirect($url)
-    {
-        header("Location: $url");
+        if($stmt->rowCount() > 0):
+        $_SESSION['message'] = 'USER EXISTS';
+            else:
+            if($query->execute() ):
+                $_SESSION['message'] = 'USER CREATED';
+            else:
+                $_SESSION['message'] = 'ERROR';
+            endif; 
+        endif;       
     }
 }
