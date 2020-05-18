@@ -59,7 +59,7 @@ class Database
         }
     }
     
-    public function is_loggedin()
+    public function loggedin()
     {
        if(isset($_SESSION['user_session']))
         {

@@ -5,7 +5,7 @@ session_start();
 
 $db = new Database('localhost','root','','hotelcalifornia');
 
-if($db->is_loggedin()!="")
+if($db->loggedin()!="")
 {
  $db->redirect('home.php');
 }
