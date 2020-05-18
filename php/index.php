@@ -1,14 +1,14 @@
 <?php
-require_once 'db.class.php';
+require_once 'class.php';
+
+session_start();
 
 $db = new Database('localhost','root','','hotelcalifornia');
 
-echo '<pre>';
-
-var_dump($db->login('test','test'));
-var_dump($db->login('test','test2'));
-
-echo '</pre>';
+if($db->is_loggedin()!="")
+{
+ $db->redirect('home.php');
+}
 
 if(isset($_POST['submit']))
 {
@@ -22,7 +22,7 @@ if(isset($_POST['submit']))
 }
 
 echo '<form method="post">
-<input type="text" name="username">
-<input type="password" name="password">
+<input type="text" name="username" placeholder="username">
+<input type="password" name="password" placeholder="password">
 <input type="submit" name="submit" value="Login">
 </form>';

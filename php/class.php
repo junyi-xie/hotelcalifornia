@@ -58,6 +58,18 @@ class Database
             }
         }
     }
+    
+    public function is_loggedin()
+    {
+       if(isset($_SESSION['user_session']))
+        {
+            $user_id = $_SESSION['user_session'];
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id=:user_id");
+            $stmt->execute(array(":user_id"=>$user_id));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return true;
+        }
+    }
 
     public function redirect($url)
     {
