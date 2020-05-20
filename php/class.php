@@ -68,8 +68,8 @@ class Database
             $user_id = $_SESSION['user_session'];
             $stmt = $this->pdo->prepare("SELECT id FROM users WHERE id=:user_id");
             $stmt->execute(array(":user_id"=>$user_id));
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $_SESSION['test'] = 'hello';
+            $stmt->fetch(PDO::FETCH_ASSOC);
+            return true;
         }
     }
 
@@ -90,7 +90,11 @@ class Database
 
     public function addroom($room_name, $room_price, $room_number, $room_floor, $category_id)
     {
-        // query to add a room. TODO: need to add duplication check.
+        // select all from rooms with the given room number and floor.
+        $select = $this->pdo->prepare("SELECT * FROM rooms WHERE room_number=:room_number AND room_floor=:room_floor");
+        $select->execute(array(':room_number'=>$room_number, ':room_floor'=>$room_floor));
+
+        // query to add a room.
         $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id) VALUES (:name, :price, :number, :floor, :id)");
 
         // binding the variable data.
@@ -100,15 +104,23 @@ class Database
         $stmt->bindParam(':floor', $room_floor);
         $stmt->bindParam(':id', $category_id);
 
-        $stmt->execute();
-        return true;        
+        // checks if there are no duplicates.
+        if($select->rowCount() > 0):
+            return false;
+        else:
+            if($stmt->execute() ):
+                return true;
+            else:
+                return false;
+            endif; 
+        endif;       
     }
 
-    public function deleteroom($id)
+    public function removeroom($room_number, $room_floor)
     {
-        // delete room with given id number.
-        $stmt = $this->pdo->prepare("DELETE FROM rooms where id=:id");
-        $stmt->execute(array(":id"=>$id));
+        // delete room with given room number and floor. TODO: verification.
+        $stmt = $this->pdo->prepare("DELETE FROM rooms where room_number=:room_number AND room_floor=:room_floor");
+        $stmt->execute(array(":room_number"=>$room_number, ":room_floor"=>$room_floor));
         return true;
     }
 }
