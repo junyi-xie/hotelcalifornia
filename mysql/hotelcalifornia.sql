@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2020 at 11:40 AM
+-- Generation Time: May 20, 2020 at 12:44 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -21,26 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `hotelcalifornia`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `accounts`
---
-
-CREATE TABLE `accounts` (
-  `id` int(11) NOT NULL,
-  `account_username` varchar(100) NOT NULL,
-  `account_email` varchar(100) NOT NULL,
-  `account_password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `accounts`
---
-
-INSERT INTO `accounts` (`id`, `account_username`, `account_email`, `account_password`) VALUES
-(1, 'test', 'test@test.com', '*94BDCEBE19083CE2A1F959FD02F964C7AF4CFC29');
 
 -- --------------------------------------------------------
 
@@ -110,14 +90,55 @@ CREATE TABLE `rooms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Indexes for dumped tables
+-- Dumping data for table `rooms`
 --
 
+INSERT INTO `rooms` (`id`, `room_name`, `room_price`, `room_number`, `room_floor`, `category_id`) VALUES
+(1, 'Solo Room v1', '399.00', 3, '1F', 1),
+(2, 'Solo Room v2', '299.00', 1, '2F', 1),
+(3, 'Double Room v1', '699.00', 1, '3F', 2),
+(4, 'Double Room v2', '159.00', 2, '4F', 2),
+(5, 'Double Room v3', '412.00', 5, '1F', 2),
+(6, 'Family Room v1', '899.00', 6, '2F', 3),
+(7, 'Family Room v2', '689.00', 7, '2F', 3),
+(8, 'Family Room v3', '789.00', 4, '3F', 3),
+(9, 'Family Room v4', '349.00', 1, '5F', 3),
+(10, 'Family Room v5', '49.00', 4, '1F', 3),
+(11, 'Family Room v6', '329.00', 2, '6F', 3),
+(12, 'Apartment Room v1', '749.00', 2, '2F', 4),
+(13, 'Apartment Room v2', '819.00', 4, '2F', 4),
+(14, 'Apartment Room v3', '999.00', 3, '2F', 4),
+(15, 'Apartment Room v4', '1199.00', 6, '2F', 4),
+(16, 'Apartment Room v5', '1999.00', 5, '3F', 4),
+(17, 'Solo Room v3', '929.00', 4, '6F', 1),
+(18, 'Solo Room v4', '709.00', 3, '7F', 1),
+(19, 'Solo Room v5', '2999.00', 2, '5F', 1),
+(20, 'Double Room v4', '100.00', 7, '6F', 2),
+(21, 'Double Room v5', '489.00', 1, '5F', 2);
+
+-- --------------------------------------------------------
+
 --
--- Indexes for table `accounts`
+-- Table structure for table `users`
 --
-ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`id`);
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `user_password` varchar(100) NOT NULL,
+  `user_email` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `user_name`, `user_password`, `user_email`) VALUES
+(1, 'test', '$2y$10$GGcBL6jIi9nNWYGzGUB5vOuKwBEVuQYISt8.5TZm0uZUGJXimxLSC', 'test@test.com');
+
+--
+-- Indexes for dumped tables
+--
 
 --
 -- Indexes for table `categories`
@@ -147,20 +168,20 @@ ALTER TABLE `rooms`
   ADD KEY `category_id` (`category_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indexes for table `users`
 --
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for table `accounts`
+-- AUTO_INCREMENT for dumped tables
 --
-ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -178,7 +199,13 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
