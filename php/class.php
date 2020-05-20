@@ -118,9 +118,36 @@ class Database
 
     public function removeroom($room_number, $room_floor)
     {
-        // delete room with given room number and floor. TODO: verification.
+        // delete room with given room number and floor.
         $stmt = $this->pdo->prepare("DELETE FROM rooms where room_number=:room_number AND room_floor=:room_floor");
         $stmt->execute(array(":room_number"=>$room_number, ":room_floor"=>$room_floor));
         return true;
+    }
+
+    public function addcustomer($first_name, $last_name, $address, $zipcode, $city, $country, $telephone, $email)
+    {
+        $select = $this->pdo->prepare("SELECT * FROM customers WHERE customer_telephone=:telephone OR customer_email=:email");
+        $select->execute(array(':telephone'=>$telephone, ':email'=>$email));
+
+        $stmt = $this->pdo->prepare("INSERT INTO customers (customer_first_name, customer_last_name, customer_address, customer_zip_code, customer_city, customer_country, customer_telephone, customer_email) VALUES (:first_name, :last_name, :address, :zipcode, :city, :country, :telephone, :email)");
+
+        $stmt->bindParam(':first_name', $first_name);
+        $stmt->bindParam(':last_name', $last_name);
+        $stmt->bindParam(':address', $address);
+        $stmt->bindParam(':zipcode', $zipcode);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':country', $country);
+        $stmt->bindParam(':telephone', $telephone);
+        $stmt->bindParam(':email', $email);
+
+        if($select->rowCount() > 0):
+            return false;
+        else:
+            if($stmt->execute() ):
+                return true;
+            else:
+                return false;
+            endif; 
+        endif;     
     }
 }
