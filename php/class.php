@@ -150,4 +150,9 @@ class Database
             endif; 
         endif;     
     }
+
+    public function reservation()
+    {
+        
+    }
 }

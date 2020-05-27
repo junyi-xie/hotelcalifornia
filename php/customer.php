@@ -30,3 +30,5 @@ if (isset($_POST['customer']))
     $email = $_POST['email'];
     var_dump($db->addcustomer($first_name, $last_name, $address, $zipcode, $city, $country, $telephone, $email));
 }
+
+echo '<input type="datetime" name="" id="">';
