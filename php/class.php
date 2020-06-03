@@ -88,14 +88,14 @@ class Database
         return $showroom;
     }
 
-    public function addroom($room_name, $room_price, $room_number, $room_floor, $category_id)
+    public function addroom($room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
     {
         // select all from rooms with the given room number and floor.
         $select = $this->pdo->prepare("SELECT * FROM rooms WHERE room_number=:room_number AND room_floor=:room_floor");
         $select->execute(array(':room_number'=>$room_number, ':room_floor'=>$room_floor));
 
         // query to add a room.
-        $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id) VALUES (:name, :price, :number, :floor, :id)");
+        $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id, room_description) VALUES (:name, :price, :number, :floor, :id, :description)");
 
         // binding the variable data.
         $stmt->bindParam(':name', $room_name);
@@ -103,6 +103,7 @@ class Database
         $stmt->bindParam(':number', $room_number);
         $stmt->bindParam(':floor', $room_floor);
         $stmt->bindParam(':id', $category_id);
+        $stmt->bindParam(':description', $room_description);
 
         // checks if there are no duplicates.
         if($select->rowCount() > 0):
@@ -116,11 +117,11 @@ class Database
         endif;       
     }
 
-    public function removeroom($room_number, $room_floor)
+    public function removeroom($room_id)
     {
         // delete room with given room number and floor.
-        $stmt = $this->pdo->prepare("DELETE FROM rooms where room_number=:room_number AND room_floor=:room_floor");
-        $stmt->execute(array(":room_number"=>$room_number, ":room_floor"=>$room_floor));
+        $stmt = $this->pdo->prepare("DELETE FROM rooms where id=:room_id");
+        $stmt->execute(array(":room_id"=>$room_id));
         return true;
     }
 
@@ -151,8 +152,15 @@ class Database
         endif;     
     }
 
+    public function showcustomers($id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM customers WHERE id=:customer_id");
+        $stmt->execute(array(":customer_id"=>$id));
+        $showcustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $showcustomers;
+    }
+
     public function reservation()
     {
-        
+        // $select = $this->pdo->("SELECT * FROM reservations WHERE")
     }
 }
