@@ -107,12 +107,12 @@ class Database
 
         // checks if there are no duplicates.
         if($select->rowCount() > 0):
-            return false;
+            return 'room already exists';
         else:
             if($stmt->execute() ):
-                return true;
+                return 'room added';
             else:
-                return false;
+                return 'error';
             endif; 
         endif;       
     }
@@ -152,6 +152,23 @@ class Database
         endif;     
     }
 
+    public function editroom($id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
+    {
+        $update = $this->pdo->prepare("UPDATE rooms SET room_name=:name, room_price=:price, room_number=:number, room_floor=:floor, category_id=:category, room_description=:description WHERE id=:id");
+
+        $update->bindParam(':id', $id);
+        $update->bindParam(':name', $room_name);
+        $update->bindParam(':price', $room_price);
+        $update->bindParam(':number', $room_number);
+        $update->bindParam(':floor', $room_floor);
+        $update->bindParam(':category', $category_id);
+        $update->bindParam(':description', $room_description);
+
+        $update->execute();
+
+        return true;
+    }
+
     public function showcustomers($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM customers WHERE id=:customer_id");
         $stmt->execute(array(":customer_id"=>$id));
@@ -159,8 +176,26 @@ class Database
         return $showcustomers;
     }
 
-    public function reservation()
+    public function reservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id)
     {
-        // $select = $this->pdo->("SELECT * FROM reservations WHERE")
+        $select = $this->pdo->prepare("SELECT * FROM reservations WHERE reservation_start=:start_date AND reservation_end=:end_date AND room_id=:room_id");
+        $select->execute(array(':start_date'=>$reservation_start_date, ':end_date'=>$reservation_end_date, ':room_id'=>$room_id));
+
+        $stmt = $this->pdo->prepare("INSERT INTO reservations (reservation_start, reservation_end, customer_id, room_id) VALUES (:start_date, :end_date, :customer_id, :room_id)");
+
+        $stmt->bindParam(':start_date', $reservation_start_date);
+        $stmt->bindParam(':end_date', $reservation_end_date);
+        $stmt->bindParam(':customer_id', $customer_id);
+        $stmt->bindParam(':room_id', $room_id);
+
+        if($select->rowCount() > 0):
+            return false;
+        else:
+            if($stmt->execute() ):
+                return true;
+            else:
+                return false;
+            endif; 
+        endif;   
     }
 }
