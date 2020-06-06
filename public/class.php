@@ -1,4 +1,5 @@
 <?php
+session_start();
 class Database
 {
     protected $hostname;
@@ -84,8 +85,8 @@ class Database
         // show rooms by category type.
         $stmt = $this->pdo->prepare("SELECT * FROM rooms where category_id=:category");
         $stmt->execute(array(":category"=>$category));
-        $showroom = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $showroom;
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function addroom($room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
@@ -172,11 +173,11 @@ class Database
     public function showcustomers($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM customers WHERE id=:customer_id");
         $stmt->execute(array(":customer_id"=>$id));
-        $showcustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $showcustomers;
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
-    public function reservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id)
+    public function bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id)
     {
         $select = $this->pdo->prepare("SELECT * FROM reservations WHERE reservation_start=:start_date AND reservation_end=:end_date AND room_id=:room_id");
         $select->execute(array(':start_date'=>$reservation_start_date, ':end_date'=>$reservation_end_date, ':room_id'=>$room_id));
@@ -189,13 +190,23 @@ class Database
         $stmt->bindParam(':room_id', $room_id);
 
         if($select->rowCount() > 0):
-            return false;
+            return 'room already booked';
         else:
-            if($stmt->execute() ):
-                return true;
+            if($stmt->execute()):
+                return 'room has been booked';
             else:
-                return false;
+                return 'error';
             endif; 
         endif;   
     }
+
+    public function showreservation($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM reservations WHERE id=:reservation_id");
+        $stmt->execute(array(":reservation_id"=>$id));
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }
+
+$db = new Database('localhost','root','','hotelcalifornia');
