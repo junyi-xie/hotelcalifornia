@@ -3,4 +3,4 @@ require 'class.php';
 
 session_destroy();
 
-$db->redirect('login.php');
+$db->redirect('signin.php');
