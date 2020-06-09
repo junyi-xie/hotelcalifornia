@@ -5,6 +5,22 @@ if(!$db->loggedin())
 {
  $db->redirect('signin.php');
 }
+
+$rooms = "SELECT * FROM rooms";
+$rooms_stmt = $db->pdo->query($rooms);
+$rooms_results = $rooms_stmt->fetchAll();
+
+$customers = "SELECT * FROM customers";
+$customers_stmt = $db->pdo->query($customers);
+$customers_results = $customers_stmt->fetchAll();
+
+$categories = "SELECT * FROM categories";
+$categories_stmt = $db->pdo->query($categories);
+$categories_results = $categories_stmt->fetchAll();
+
+$reservations = "SELECT * FROM reservations";
+$reservations_stmt = $db->pdo->query($reservations);
+$reservations_results = $reservations_stmt->fetchAll();
 ?> 
 
 <!DOCTYPE html>
@@ -12,7 +28,7 @@ if(!$db->loggedin())
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard - Hotel California</title>
+	<title>Pages - Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
@@ -34,8 +50,8 @@ if(!$db->loggedin())
 			  <h1><span class="logo">California</span></h1>
 
 				<ul class="list-unstyled components">
-				
-		  			<li class="active">
+
+                    <li>
 						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
 		  			</li>
 		  
@@ -51,7 +67,7 @@ if(!$db->loggedin())
 		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
-					<li>
+					<li class="active">
 		  				<a href="pages.php"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
 					</li>
 
@@ -67,10 +83,7 @@ if(!$db->loggedin())
 
   		<div id="content" class="p-4 p-md-5 pt-5">
 		
-			<h2 class="mb-4">Welcome!</h2>
-	
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <h1>pages</h1>
   
 		</div>
 

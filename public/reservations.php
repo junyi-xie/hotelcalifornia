@@ -28,7 +28,7 @@ $reservations_results = $reservations_stmt->fetchAll();
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard - Hotel California</title>
+	<title>Reservations - Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
@@ -51,8 +51,8 @@ $reservations_results = $reservations_stmt->fetchAll();
 
 				<ul class="list-unstyled components">
 
-		  			<li>
-						<a href="dashboard.php"><span class="fas fa-home mr-3"></span>Dashboard</a>
+					<li>
+						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
 		  			</li>
 		  
 					<li>
@@ -60,15 +60,15 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 		  			<li>
-		  				<a href="customers.php"><span class="fas fa-user-alt mr-3"></span>Customers</a>
+		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li class="active">
-		  				<a href="reservations.php"><span class="fas fa-bed mr-3"></span>Reservations</a>
+		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
 					<li>
-		  				<a href="#"><i class="fa fa-paper-plane mr-3"></i>Contact</a>
+		  				<a href="pages.php"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
 					</li>
 
 					<li>
@@ -138,7 +138,7 @@ if (isset($_POST['book_room']))
 <input type="hidden" name="show_res">
 </form>
 
-
+<pre>
 <?php
 if (isset($_POST['show_res']))
 {
@@ -146,7 +146,7 @@ if (isset($_POST['show_res']))
     print_r($db->showreservation($id));
 }
 ?>
-
+</pre>
 
   
 		</div>

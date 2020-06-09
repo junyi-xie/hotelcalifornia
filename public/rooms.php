@@ -21,6 +21,10 @@ $categories_results = $categories_stmt->fetchAll();
 $reservations = "SELECT * FROM reservations";
 $reservations_stmt = $db->pdo->query($reservations);
 $reservations_results = $reservations_stmt->fetchAll();
+
+$test = "SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_floor";
+$test_stmt = $db->pdo->query($test);
+$test_results = $test_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?> 
 
 <!DOCTYPE html>
@@ -28,8 +32,9 @@ $reservations_results = $reservations_stmt->fetchAll();
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard - Hotel California</title>
+	<title>Rooms - Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/room.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -51,8 +56,8 @@ $reservations_results = $reservations_stmt->fetchAll();
 
 				<ul class="list-unstyled components">
 
-		  			<li>
-						<a href="dashboard.php"><span class="fas fa-home mr-3"></span>Dashboard</a>
+					<li>
+						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
 		  			</li>
 		  
 					<li class="active">
@@ -60,15 +65,15 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 		  			<li>
-		  				<a href="customers.php"><span class="fas fa-user-alt mr-3"></span>Customers</a>
+		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li>
-		  				<a href="reservations.php"><span class="fas fa-bed mr-3"></span>Reservations</a>
+		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
 					<li>
-		  				<a href="#"><i class="fa fa-paper-plane mr-3"></i>Contact</a>
+		  				<a href="pages.php"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
 					</li>
 
 					<li>
@@ -82,7 +87,57 @@ $reservations_results = $reservations_stmt->fetchAll();
 		</nav>
 
   		<div id="content" class="p-4 p-md-5 pt-5">
+
+			<table>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Number</th>
+						<th>Floor</th>
+						<th>Category</th>
+						<th>Description</th>
+						<th></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<?php foreach ($test_results as $room): ?>
+					<tr>
+						<td><?=$room['id']?></td>
+						<td><?=$room['room_name']?></td>
+						<td><?=$room['room_price']?></td>
+						<td><?=$room['room_number']?></td>
+						<td><?=$room['room_floor']?></td>
+						<td><?=$room['category_name']?></td>
+						<td><?=$room['room_description']?></td>	
+						<td class="actions">
+                    		<a href="update.php?id=<?=$room['id']?>" class="edit"><i class="fas fa-pen"></i></a>
+                    		<a href="delete.php?id=<?=$room['id']?>" class="trash"><i class="fas fa-trash-alt"></i></a>
+                		</td>
+					</tr>
+					<?php endforeach;?>
+				</tbody>
+
+
+			</table>
 		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
           <h1>SHOW ROOM</h1>
 
 <form method="post">

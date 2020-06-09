@@ -1,0 +1,74 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background-color: #ebeef1;
+    border-bottom: 1px solid #d3dae0;
+}
+
+table thead td {
+    padding: 10px;
+    font-weight: bold;
+    color: #767779;
+    font-size: 14px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #d3dae0;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #fbfcfc;
+}
+
+table tbody tr:hover {
+    background-color: #494ca2;;
+}   
+
+table tbody tr:hover td {
+    color: #ffffff;
+}
+
+table tbody tr:hover td:nth-child(1) {
+    color: #ffffff;
+}
+
+table tbody tr td {
+    padding: 10px;
+}
+
+table tbody tr td:nth-child(1) {
+    color: #a5a7a9;
+}
+
+table tbody tr td.actions {
+    padding: 8px;
+    text-align: right;
+}
+
+table tbody tr td.actions .edit,  
+table tbody tr td.actions .trash {
+    display: inline-flex;
+    text-align: right;
+    text-decoration: none;
+    color: #FFFFFF;
+    padding: 10px 12px;
+}
+ 
+table tbody tr td.actions .trash {
+    background-color: #b73737;
+}
+ 
+table tbody tr td.actions .trash:hover {
+    background-color: #a33131;
+}
+ 
+table tbody tr td.actions .edit {
+    background-color: #37afb7;
+}
+ 
+table tbody tr td.actions .edit:hover {
+    background-color: #319ca3;
+}
