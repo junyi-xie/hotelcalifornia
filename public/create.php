@@ -12,7 +12,7 @@ if(!$db->loggedin())
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Create - Hotel California</title>
+	<title>Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
@@ -42,14 +42,14 @@ if(!$db->loggedin())
                     <li>
 					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
 
-              			<ul class="collapse list-unstyled" id="submenuRooms">
+              			<ul class="collapse list-unstyled show" id="submenuRooms">
 
                 			<li>
                     			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
 							</li>
 							
                	 			<li class="active">
-                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Rooms</a>
+                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Room</a>
                 			</li>
         
 						  </ul>
@@ -101,36 +101,23 @@ if(!$db->loggedin())
 
   		<div id="content" class="p-4 p-md-5 pt-5">
 		
-          <h1>ADD ROOM</h1>
+            <h1>ADD ROOM</h1>
 <form method="post">
-<input type="text" name="name" placeholder="room name" required>
-<input type="text" name="price" placeholder="room price" required>
-<input type="text" name="number" placeholder="room number" required>
-
-
-<!-- <input type="text" name="floor" placeholder="room floor" required> -->
-<select name="floor">
-<option hidden disabled selected value> -- select floor -- </option>
-<option value="1F">First Floor</option>
-<option value="2F">Second Floor</option>
-<option value="3F">Third Floor</option>
-<option value="4F">Fourth Floor</option>
-<option value="5F">Fifth Floor</option>
-
-</select>
-
+<input type="text" name="name" placeholder="room name">
+<input type="text" name="price" placeholder="room price">
+<input type="number" name="number" placeholder="room number">
+<input type="text" name="floor" placeholder="room floor">
 
 <select name="category_id">
-<option hidden disabled selected value> -- select which category-- </option>
-<?php foreach ($categories_results as $category):?>
-     
-     <br><option value="<?=$category['id']?>"><?=$category['category_name']?></option>
- 
- 
- <?php endforeach;?>
+    <option hidden disabled selected value> -- select category -- </option>
+    <option value="1">Single Room</option>
+    <option value="2">Double Room</option>
+    <option value="3">Family Room</option>
+    <option value="4">Apartment</option>
 </select>
-<!-- <input type="text" name="category_id" placeholder="category id" required>  -->
-<textarea name="description" placeholder="enter description" required></textarea>
+
+
+<input type="text" name="description" placeholder="enter description">
 <input type="submit" name="add" value="Add room">
 </form>
 <?php
@@ -144,10 +131,6 @@ if (isset($_POST['add']))
     $description = $_POST['description'];
     print_r($db->addroom($name, $price, $number, $floor, $category_id, $description));
 }
-
-echo '<br/><br/>';
-
-
 ?>
   
 		</div>

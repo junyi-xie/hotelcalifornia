@@ -8,16 +8,16 @@ if(!$db->loggedin())
 
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$records_per_page = 10;
+$records_per_page = 9;
 
-$stmt = $db->pdo->prepare('SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_id LIMIT :current_page, :record_per_page');
+$stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_id LIMIT :current_page, :record_per_page");
 $stmt->bindValue(':current_page', ($page-1)*$records_per_page, PDO::PARAM_INT);
 $stmt->bindValue(':record_per_page', $records_per_page, PDO::PARAM_INT);
 $stmt->execute();
 
 $rooms_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$num_contacts = $db->pdo->query('SELECT COUNT(*) FROM rooms')->fetchColumn();
+$num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@ $num_contacts = $db->pdo->query('SELECT COUNT(*) FROM rooms')->fetchColumn();
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Rooms - Hotel California</title>
+	<title>Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
 	<link rel="stylesheet" href="css/room.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -56,14 +56,14 @@ $num_contacts = $db->pdo->query('SELECT COUNT(*) FROM rooms')->fetchColumn();
 					<li>
 					  <a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
 
-              			<ul class="collapse list-unstyled" id="submenuRooms">
+              			<ul class="collapse list-unstyled show" id="submenuRooms">
 
                 			<li class="active">
                     			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
 							</li>
 							
                	 			<li>
-                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Rooms</a>
+                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Room</a>
                 			</li>
         
 						</ul>

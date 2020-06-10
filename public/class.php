@@ -96,14 +96,14 @@ class Database
         $select->execute(array(':room_number'=>$room_number, ':room_floor'=>$room_floor));
 
         // query to add a room.
-        $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id, room_description) VALUES (:name, :price, :number, :floor, :id, :description)");
+        $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id, room_description) VALUES (:name, :price, :number, :floor, :category_id, :description)");
 
         // binding the variable data.
         $stmt->bindParam(':name', $room_name);
         $stmt->bindParam(':price', $room_price);
         $stmt->bindParam(':number', $room_number);
         $stmt->bindParam(':floor', $room_floor);
-        $stmt->bindParam(':id', $category_id);
+        $stmt->bindParam(':category_id', $category_id);
         $stmt->bindParam(':description', $room_description);
 
         // checks if there are no duplicates.
@@ -153,17 +153,18 @@ class Database
         endif;     
     }
 
-    public function editroom($id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
+    public function editroom($room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description, $id)
     {
-        $update = $this->pdo->prepare("UPDATE rooms SET room_name=:name, room_price=:price, room_number=:number, room_floor=:floor, category_id=:category, room_description=:description WHERE id=:id");
+        $update = $this->pdo->prepare("UPDATE rooms SET room_id=:room_id, room_name=:name, room_price=:price, room_number=:number, room_floor=:floor, category_id=:category, room_description=:description WHERE room_id=:id");
 
-        $update->bindParam(':id', $id);
+        $update->bindParam(':room_id', $room_id);
         $update->bindParam(':name', $room_name);
         $update->bindParam(':price', $room_price);
         $update->bindParam(':number', $room_number);
         $update->bindParam(':floor', $room_floor);
         $update->bindParam(':category', $category_id);
         $update->bindParam(':description', $room_description);
+        $update->bindParam(':id', $id);
 
         $update->execute();
 
