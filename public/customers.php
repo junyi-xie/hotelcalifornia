@@ -56,7 +56,20 @@ $reservations_results = $reservations_stmt->fetchAll();
 		  			</li>
 		  
 					<li>
-			  			<a href="rooms.php"><span class="fas fa-hotel mr-3"></span>Rooms</a>
+					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
+
+              			<ul class="collapse list-unstyled" id="submenuRooms">
+
+                			<li>
+                    			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
+							</li>
+							
+               	 			<li>
+                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Rooms</a>
+                			</li>
+        
+						</ul>
+						  
 					</li>
 
 		  			<li class="active">
@@ -68,7 +81,28 @@ $reservations_results = $reservations_stmt->fetchAll();
 		  			</li>
 				  
 					<li>
-		  				<a href="pages.php"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
+					  	<a href="#submenuPages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
+
+              			<ul class="collapse list-unstyled" id="submenuPages">
+
+						  	<li>
+                    			<a href="#"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
+							</li>
+
+                			<li>
+                    			<a href="#"><i class="far fa-address-book mr-3"></i>Contact</a>
+							</li>
+									
+							<li>
+								<a href="#"><i class="fas fa-clock mr-3"></i>Openinghours</a>
+							</li>
+
+							<li>
+								<a href="#"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
+							</li>
+        
+						</ul>
+						  
 					</li>
 
 					<li>

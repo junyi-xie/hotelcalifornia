@@ -6,21 +6,33 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-$rooms = "SELECT * FROM rooms";
-$rooms_stmt = $db->pdo->query($rooms);
-$rooms_results = $rooms_stmt->fetchAll();
-
-$customers = "SELECT * FROM customers";
-$customers_stmt = $db->pdo->query($customers);
-$customers_results = $customers_stmt->fetchAll();
-
-$categories = "SELECT * FROM categories";
-$categories_stmt = $db->pdo->query($categories);
-$categories_results = $categories_stmt->fetchAll();
-
-$reservations = "SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id";
-$reservations_stmt = $db->pdo->query($reservations);
-$reservations_results = $reservations_stmt->fetchAll();
+// Check if the contact id exists, for example update.php?id=1 will get the contact with the id of 1
+if (isset($_GET['id'])) {
+    if (!empty($_POST)) {
+        // This part is similar to the create.php, but instead we update a record and not insert
+        $id = isset($_POST['room_id']);
+        $name = isset($_POST['room_name']);
+        $price = isset($_POST['room_price']);
+        $floor = isset($_POST['room_floor']);
+        $category = isset($_POST['category_id']);
+        $description = isset($_POST['room_description']);
+        
+        // Update the record
+        $stmt = $db->pdo->prepare('UPDATE rooms SET room_name = :room_name, room_price = :room_price, room_number = :room_number, room_floor = :room_floor, category_id = :category_id, room_description = :room_description WHERE room_id = :room_id');
+        $stmt->execute([$id, $name, $price, $floor, $category, $description, $_GET['id']]);
+    }
+    // $category_stmt = $db->pdo->prepare("SELECT * FROM categories");
+    // $category_stmt->execute();
+    // Get the contact from the contacts table
+    $stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id WHERE room_id = :room_id");
+    $stmt->execute(array(':room_id'=>$_GET['id']));
+    $results = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$results) {
+        exit('Contact doesn\'t exist with that ID!');
+    }
+} else {
+    exit('No ID specified!');
+}
 ?> 
 
 <!DOCTYPE html>
@@ -28,7 +40,7 @@ $reservations_results = $reservations_stmt->fetchAll();
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Reservations - Hotel California</title>
+	<title>Create - Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
@@ -50,17 +62,17 @@ $reservations_results = $reservations_stmt->fetchAll();
 			  <h1><span class="logo">California</span></h1>
 
 				<ul class="list-unstyled components">
-
-					<li>
+				
+		  			<li>
 						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
 		  			</li>
 		  
-					<li>
+                    <li>
 					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
 
               			<ul class="collapse list-unstyled" id="submenuRooms">
 
-                			<li>
+                			<li class="active">
                     			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
 							</li>
 							
@@ -68,7 +80,7 @@ $reservations_results = $reservations_stmt->fetchAll();
                     			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Rooms</a>
                 			</li>
         
-						</ul>
+						  </ul>
 						  
 					</li>
 
@@ -76,11 +88,11 @@ $reservations_results = $reservations_stmt->fetchAll();
 		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
-		  			<li class="active">
+		  			<li>
 		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
-					<li>
+                    <li>
 					  	<a href="#submenuPages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
 
               			<ul class="collapse list-unstyled" id="submenuPages">
@@ -117,71 +129,16 @@ $reservations_results = $reservations_stmt->fetchAll();
 
   		<div id="content" class="p-4 p-md-5 pt-5">
 		
-          <h1>BOOK RESERVATION</h1>
-
-
-<form method="post">
-<input type="date" min="<?php echo date('Y-m-d')?>" name="start_date" placeholder="start_date">
-<input type="date" name="end_date" placeholder="end_date">
-<select name="customer_id">
-<option hidden disabled selected value> -- select which customer you are -- </option>
-    <?php foreach ($customers_results as $customers):?>
-     
-        <br><option value="<?=$customers['id']?>"><?=$customers['customer_first_name'], str_repeat('&nbsp;', 1), $customers['customer_last_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
-
-<select name="select_room">
-<option hidden disabled selected value> -- select which room you wanna book -- </option>
-<?php foreach ($rooms_results as $key => $room):?>
-    <option value="<?=$room['id']?>"><?=$room['room_name']?></option>
-<?php endforeach; ?>
-</select>
-<input type="submit" name="book_room" value="book room">
-
+          <form action="update.php?id=<?=$results['room_id']?>" method="post">
+    <input type="number" name="room_id" value="<?=$results['room_id']?>" placeholder="<?=$results['room_id']?>" disabled>
+    <input type="text" name="room_name" value="<?=$results['room_name']?>" placeholder="<?=$results['room_name']?>">
+    <input type="text" name="room_price" value="<?=$results['room_price']?>" placeholder="<?=$results['room_price']?>">
+    <input type="text" name="room_number" value="<?=$results['room_number']?>" placeholder="<?=$results['room_number']?>">
+    <input type="text" name="room_floor" value="<?=$results['room_floor']?>" placeholder="<?=$results['room_floor']?>">
+    <input type="text" name="category_id" value="<?=$results['category_id']?>" placeholder="<?=$results['category_id']?>">
+    <input type="text" name="room_description" value="<?=$results['room_description']?>" placeholder="<?=$results['room_description']?>">
+    <input type="submit" name="edit" value="edit room">
 </form>
-
-<?php
-if (isset($_POST['book_room']))
-{
-    $reservation_start_date = $_POST['end_date'];
-    $reservation_end_date = $_POST['start_date'];
-    $customer_id = $_POST['customer_id'];
-    $room_id = $_POST['select_room'];
-    
-    print_r($db->bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id));
-}
-?>
-
-<br/><br/>
-
-<h1>SHOW RESERVATIONS</h1>
-<form method="post">
-
-<select name="res_id" onchange="this.form.submit()">
-<option hidden disabled selected value> -- show which room got booked -- </option>
-    <?php foreach ($reservations_results as $reservation):?>
-     
-        <br><option value="<?=$reservation['id']?>"><?=$reservation['room_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
-<input type="hidden" name="show_res">
-</form>
-
-<pre>
-<?php
-if (isset($_POST['show_res']))
-{
-    $id = $_POST['res_id'];
-    print_r($db->showreservation($id));
-}
-?>
-</pre>
-
   
 		</div>
 
@@ -193,3 +150,20 @@ if (isset($_POST['show_res']))
 	<script src="js/main.js"></script>	
 </body>
 </html>
+
+
+
+<?php
+echo '<br/><br/>';
+if (isset($_POST['edit']))
+{
+    $id = $_POST['edit_room_id'];
+    $room_name = $_POST['name'];
+    $room_price = $_POST['price'];
+    $room_number = $_POST['number'];
+    $room_floor = $_POST['floor'];
+    $category_id = $_POST['category_id'];
+    $room_description = $_POST['description'];
+    var_dump($db->editroom($id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description));
+}
+?>

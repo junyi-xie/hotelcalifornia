@@ -6,26 +6,19 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-$rooms = "SELECT * FROM rooms";
-$rooms_stmt = $db->pdo->query($rooms);
-$rooms_results = $rooms_stmt->fetchAll();
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$customers = "SELECT * FROM customers";
-$customers_stmt = $db->pdo->query($customers);
-$customers_results = $customers_stmt->fetchAll();
+$records_per_page = 10;
 
-$categories = "SELECT * FROM categories";
-$categories_stmt = $db->pdo->query($categories);
-$categories_results = $categories_stmt->fetchAll();
+$stmt = $db->pdo->prepare('SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_id LIMIT :current_page, :record_per_page');
+$stmt->bindValue(':current_page', ($page-1)*$records_per_page, PDO::PARAM_INT);
+$stmt->bindValue(':record_per_page', $records_per_page, PDO::PARAM_INT);
+$stmt->execute();
 
-$reservations = "SELECT * FROM reservations";
-$reservations_stmt = $db->pdo->query($reservations);
-$reservations_results = $reservations_stmt->fetchAll();
+$rooms_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$test = "SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_floor";
-$test_stmt = $db->pdo->query($test);
-$test_results = $test_stmt->fetchAll(PDO::FETCH_ASSOC);
-?> 
+$num_contacts = $db->pdo->query('SELECT COUNT(*) FROM rooms')->fetchColumn();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,28 +45,62 @@ $test_results = $test_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			<div class="p-4 pt-5">
 
-			  <h1><span class="logo">California</span></h1>
+			  	<h1><span class="logo">California</span></h1>
 
 				<ul class="list-unstyled components">
 
 					<li>
 						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
 		  			</li>
-		  
-					<li class="active">
-			  			<a href="rooms.php"><span class="fas fa-hotel mr-3"></span>Rooms</a>
-					</li>
+					
+					<li>
+					  <a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
 
+              			<ul class="collapse list-unstyled" id="submenuRooms">
+
+                			<li class="active">
+                    			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
+							</li>
+							
+               	 			<li>
+                    			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Rooms</a>
+                			</li>
+        
+						</ul>
+						  
+					</li>		  
+			  
 		  			<li>
 		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li>
 		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
-		  			</li>
-				  
+					</li>
+					  
 					<li>
-		  				<a href="pages.php"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
+					  <a href="#submenuPages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
+
+              			<ul class="collapse list-unstyled" id="submenuPages">
+
+						  	<li>
+                    			<a href="#"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
+							</li>
+
+                			<li>
+                    			<a href="#"><i class="far fa-address-book mr-3"></i>Contact</a>
+							</li>
+									
+							<li>
+								<a href="#"><i class="fas fa-clock mr-3"></i>Openinghours</a>
+							</li>
+
+							<li>
+								<a href="#"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
+							</li>
+        
+						</ul>
+						  
 					</li>
 
 					<li>
@@ -91,217 +118,46 @@ $test_results = $test_stmt->fetchAll(PDO::FETCH_ASSOC);
 			<table>
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Price</th>
-						<th>Number</th>
-						<th>Floor</th>
-						<th>Category</th>
-						<th>Description</th>
-						<th></th>
+						<td>#</td>
+						<td>Name</td>
+						<td>Price</td>
+						<td>Number</td>
+						<td>Floor</td>
+						<td>Category</td>
+						<td>Description</td>
+						<td></td>
 					</tr>
 				</thead>
 
 				<tbody>
-					<?php foreach ($test_results as $room): ?>
+					<?php foreach ($rooms_results as $room): ?>
 					<tr>
-						<td><?=$room['id']?></td>
+						<td><?=$room['room_id']?></td>
 						<td><?=$room['room_name']?></td>
-						<td><?=$room['room_price']?></td>
+						<td>&euro;<?=$room['room_price']?></td>
 						<td><?=$room['room_number']?></td>
 						<td><?=$room['room_floor']?></td>
 						<td><?=$room['category_name']?></td>
 						<td><?=$room['room_description']?></td>	
 						<td class="actions">
-                    		<a href="update.php?id=<?=$room['id']?>" class="edit"><i class="fas fa-pen"></i></a>
-                    		<a href="delete.php?id=<?=$room['id']?>" class="trash"><i class="fas fa-trash-alt"></i></a>
+                    		<a href="update.php?id=<?=$room['room_id']?>" class="edit"><i class="fas fa-pen"></i></a>
+                    		<a href="delete.php?id=<?=$room['room_id']?>" class="trash"><i class="fas fa-trash-alt"></i></a>
                 		</td>
 					</tr>
 					<?php endforeach;?>
 				</tbody>
 
-
 			</table>
-		
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-		  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-          <h1>SHOW ROOM</h1>
-
-<form method="post">
-<select name="id" onchange="this.form.submit()">
-<option hidden disabled selected value> -- select category type -- </option>
-    <option value="1">Single Room</option>
-    <option value="2">Double Room</option>
-    <option value="3">Family Room</option>
-    <option value="4">Apartment</option>
-</select>
-<input type="hidden" name="show">
-</form>
-
-<!-- <form method="post">
-<input type="number" min="1" max="4" name="id" placeholder="id" required>
-<input type="submit" name="show" value="Submit">
-</form> -->
-
-<?php
-echo '<pre>';
-
-if (isset($_POST['show']))
-{
-    $id = $_POST['id'];
-    print_r($db->showroom($id));
-}
-
-echo '</pre>';
-echo '<br/><br/>';
-?>
-
-<h1>ADD ROOM</h1>
-<form method="post">
-<input type="text" name="name" placeholder="room name" required>
-<input type="text" name="price" placeholder="room price" required>
-<input type="text" name="number" placeholder="room number" required>
-
-
-<!-- <input type="text" name="floor" placeholder="room floor" required> -->
-<select name="floor">
-<option hidden disabled selected value> -- select floor -- </option>
-<option value="1F">First Floor</option>
-<option value="2F">Second Floor</option>
-<option value="3F">Third Floor</option>
-<option value="4F">Fourth Floor</option>
-<option value="5F">Fifth Floor</option>
-
-</select>
-
-
-<select name="category_id">
-<option hidden disabled selected value> -- select which category-- </option>
-<?php foreach ($categories_results as $category):?>
-     
-     <br><option value="<?=$category['id']?>"><?=$category['category_name']?></option>
- 
- 
- <?php endforeach;?>
-</select>
-<!-- <input type="text" name="category_id" placeholder="category id" required>  -->
-<textarea name="description" placeholder="enter description" required></textarea>
-<input type="submit" name="add" value="Add room">
-</form>
-<?php
-if (isset($_POST['add']))
-{
-    $name = $_POST['name'];
-    $price = $_POST['price'];
-    $number = $_POST['number'];
-    $floor = $_POST['floor'];
-    $category_id = $_POST['category_id'];
-    $description = $_POST['description'];
-    print_r($db->addroom($name, $price, $number, $floor, $category_id, $description));
-}
-
-echo '<br/><br/>';
-
-
-?>
-
-
-
-<h1>REMOVE ROOM</h1>
-
-<form method="post">
-<select name="room_id" onchange="this.form.submit()">
-<option hidden disabled selected value> -- select which room to delete -- </option>
-    <?php foreach ($rooms_results as $room):?>
-     
-        <br><option value="<?=$room['id']?>"><?=$room['room_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
-<input type="hidden" name="remove">
-</form>
-
-<?php
-echo '<br/><br/>';
-if (isset($_POST['remove']))
-{
-    $room_id = $_POST['room_id'];
-    var_dump($db->removeroom($room_id));
-}
-?>
-
-
-<h1>EDIT ROOM</h1>
-
-<form method="post">
-
-<select name="edit_room_id">
-<option hidden disabled selected value> -- select old room name -- </option>
-<?php foreach ($rooms_results as $key => $room):?>
-    <option value="<?=$room['id']?>"><?=$room['room_name']?></option>
-<?php endforeach; ?>
-</select>
-
-<input type="text" name="name" placeholder=" new room name" required>
-<input type="text" name="price" placeholder=" new room price" required>
-<input type="text" name="number" placeholder="new room number" required>
-
-
-<!-- <input type="text" name="floor" placeholder="room floor" required> -->
-<select name="floor">
-<option hidden disabled selected value> -- select floor -- </option>
-<option value="1F">First Floor</option>
-<option value="2F">Second Floor</option>
-<option value="3F">Third Floor</option>
-<option value="4F">Fourth Floor</option>
-<option value="5F">Fifth Floor</option>
-</select>
-
-<select name="category_id">
-<option hidden disabled selected value> -- select category -- </option>
-<?php foreach ($categories_results as $category):?>
-     
-     <br><option value="<?=$category['id']?>"><?=$category['category_name']?></option>
- 
- 
- <?php endforeach;?>
-</select>
-<!-- <input type="text" name="category_id" placeholder="category id" required>  -->
-<textarea name="description" placeholder="enter description" required></textarea>
-<input type="submit" name="edit" value="edit room">
-
-
-</form>
-
-<?php
-echo '<br/><br/>';
-if (isset($_POST['edit']))
-{
-    $id = $_POST['edit_room_id'];
-    $room_name = $_POST['name'];
-    $room_price = $_POST['price'];
-    $room_number = $_POST['number'];
-    $room_floor = $_POST['floor'];
-    $category_id = $_POST['category_id'];
-    $room_description = $_POST['description'];
-    var_dump($db->editroom($id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description));
-}
-?>
-  
+			<div class="page">
+		<?php if ($page > 1): ?>
+		<a class="left" href="rooms.php?page=<?=$page-1?>"><i class="fas fa-angle-double-left"></i></a>
+		<?php endif; ?>
+		<?php if ($page*$records_per_page < $num_contacts): ?>
+		<a class="right" href="rooms.php?page=<?=$page+1?>"><i class="fas fa-angle-double-right"></i></a>
+		<?php endif; ?>
+	</div>
+		  
 		</div>
 
 	</div>

@@ -1,5 +1,6 @@
 table {
     width: 100%;
+    padding-top: 30px;
     border-collapse: collapse;
 }
 
@@ -24,8 +25,8 @@ table tbody tr:nth-child(even) {
 }
 
 table tbody tr:hover {
-    background-color: #494ca2;;
-}   
+    background-color: #494ca2;
+}
 
 table tbody tr:hover td {
     color: #ffffff;
@@ -48,27 +49,71 @@ table tbody tr td.actions {
     text-align: right;
 }
 
-table tbody tr td.actions .edit,  
+table tbody tr td.actions .edit,
 table tbody tr td.actions .trash {
     display: inline-flex;
     text-align: right;
     text-decoration: none;
-    color: #FFFFFF;
+    color: #ffffff;
     padding: 10px 12px;
 }
- 
+
 table tbody tr td.actions .trash {
     background-color: #b73737;
 }
- 
+
 table tbody tr td.actions .trash:hover {
     background-color: #a33131;
 }
- 
+
 table tbody tr td.actions .edit {
     background-color: #37afb7;
 }
- 
+
 table tbody tr td.actions .edit:hover {
     background-color: #319ca3;
+}
+
+.page a {
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+.page a.left {
+    float: left;
+}
+
+.page a.right {
+    float:right;
+}
+
+.page a:hover {
+    color: #494ca2;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
 }

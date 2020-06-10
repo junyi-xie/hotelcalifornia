@@ -121,7 +121,7 @@ class Database
     public function removeroom($room_id)
     {
         // delete room with given room number and floor.
-        $stmt = $this->pdo->prepare("DELETE FROM rooms where id=:room_id");
+        $stmt = $this->pdo->prepare("DELETE FROM rooms where room_id=:room_id");
         $stmt->execute(array(":room_id"=>$room_id));
         return true;
     }

@@ -153,6 +153,31 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   border-color: #393c7f;
 }
 
+.dropdown-toggle::after {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
 #sidebar .custom-menu .btn.btn-primary:hover,
 #sidebar .custom-menu .btn.btn-primary:focus {
   background: #393c7f !important;
@@ -172,4 +197,8 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+.mr-3-alt {
+  margin-right: 1.3rem!important;
 }
