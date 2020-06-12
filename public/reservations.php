@@ -18,7 +18,7 @@ $categories = "SELECT * FROM categories";
 $categories_stmt = $db->pdo->query($categories);
 $categories_results = $categories_stmt->fetchAll();
 
-$reservations = "SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id";
+$reservations = "SELECT * FROM rooms INNER JOIN reservations ON rooms.room_id = reservations.room_id";
 $reservations_stmt = $db->pdo->query($reservations);
 $reservations_results = $reservations_stmt->fetchAll();
 ?> 
@@ -121,8 +121,10 @@ $reservations_results = $reservations_stmt->fetchAll();
 
 
 <form method="post">
+<label for="start date">startdate</label>
 <input type="date" min="<?php echo date('Y-m-d')?>" name="start_date" placeholder="start_date">
-<input type="date" name="end_date" placeholder="end_date">
+<label for="start date">end date</label>
+<input type="date" min="<?php echo date('Y-m-d')?>" name="end_date" placeholder="end_date">
 <select name="customer_id">
 <option hidden disabled selected value> -- select which customer you are -- </option>
     <?php foreach ($customers_results as $customers):?>
@@ -136,7 +138,7 @@ $reservations_results = $reservations_stmt->fetchAll();
 <select name="select_room">
 <option hidden disabled selected value> -- select which room you wanna book -- </option>
 <?php foreach ($rooms_results as $key => $room):?>
-    <option value="<?=$room['id']?>"><?=$room['room_name']?></option>
+    <option value="<?=$room['room_id']?>"><?=$room['room_name']?></option>
 <?php endforeach; ?>
 </select>
 <input type="submit" name="book_room" value="book room">

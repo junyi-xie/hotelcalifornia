@@ -62,7 +62,7 @@ if(isset($_POST['update']))
                     <li>
 					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
 
-              			<ul class="collapse list-unstyled" id="submenuRooms">
+              			<ul class="collapse list-unstyled show" id="submenuRooms">
 
                 			<li class="active">
                     			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
@@ -128,7 +128,7 @@ if(isset($_POST['update']))
                 <input type="text" name="room_price" value="<?=$results['room_price']?>" placeholder="<?=$results['room_price']?>">
                 <input type="text" name="room_number" value="<?=$results['room_number']?>" placeholder="<?=$results['room_number']?>">
                 <input type="text" name="room_floor" value="<?=$results['room_floor']?>" placeholder="<?=$results['room_floor']?>">
-                <input type="text" name="category_id" value="<?=$results['category_id']?>" placeholder="<?=$results['category_id']?>">
+                <input type="text" name="category_id" value="<?=$results['category_id']?>" placeholder="<?=$results['category_id']?>" min="1" max="4">
                 <input type="text" name="room_description" value="<?=$results['room_description']?>" placeholder="<?=$results['room_description']?>">
                 <input type="submit" name="update" value="update">
         
@@ -144,20 +144,3 @@ if(isset($_POST['update']))
 	<script src="js/main.js"></script>	
 </body>
 </html>
-
-
-
-<!-- <?php
-echo '<br/><br/>';
-// if (isset($_POST['edit']))
-// {
-//     $id = $_POST['edit_room_id'];
-//     $room_name = $_POST['name'];
-//     $room_price = $_POST['price'];
-//     $room_number = $_POST['number'];
-//     $room_floor = $_POST['floor'];
-//     $category_id = $_POST['category_id'];
-//     $room_description = $_POST['description'];
-//     var_dump($db->editroom($id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description));
-// }
-?> -->
