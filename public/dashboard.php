@@ -57,11 +57,11 @@ if(!$db->loggedin())
 					</li>		  
   
 		  			<li>
-						<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
+						<a href="customers.php?page=1"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 		
 	  				<li>
-		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
+						  <a href="reservations.php?page=1"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 	  
 					<li>
@@ -87,6 +87,10 @@ if(!$db->loggedin())
         
 						</ul>
 						  
+					</li>
+
+					<li>
+						<a href="profile.php"><i class="fas fa-user-circle mr-3"></i>Profile</a>
 					</li>
 
 					<li>

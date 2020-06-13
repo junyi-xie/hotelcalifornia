@@ -6,21 +6,18 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-$rooms = "SELECT * FROM rooms";
-$rooms_stmt = $db->pdo->query($rooms);
-$rooms_results = $rooms_stmt->fetchAll();
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$customers = "SELECT * FROM customers";
-$customers_stmt = $db->pdo->query($customers);
-$customers_results = $customers_stmt->fetchAll();
+$records_per_page = 10;
 
-$categories = "SELECT * FROM categories";
-$categories_stmt = $db->pdo->query($categories);
-$categories_results = $categories_stmt->fetchAll();
+$stmt = $db->pdo->prepare("SELECT * FROM customers ORDER BY customer_id LIMIT :current_page, :record_per_page");
+$stmt->bindValue(':current_page', ($page-1)*$records_per_page, PDO::PARAM_INT);
+$stmt->bindValue(':record_per_page', $records_per_page, PDO::PARAM_INT);
+$stmt->execute();
 
-$reservations = "SELECT * FROM reservations";
-$reservations_stmt = $db->pdo->query($reservations);
-$reservations_results = $reservations_stmt->fetchAll();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$num_customers = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 ?> 
 
 <!DOCTYPE html>
@@ -30,6 +27,7 @@ $reservations_results = $reservations_stmt->fetchAll();
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/table.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -73,11 +71,11 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 		  			<li class="active">
-		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
+		  				<a href="customers.php?page=1"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li>
-		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
+		  				<a href="reservations.php?page=1"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
 					<li>
@@ -106,6 +104,10 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 					<li>
+						<a href="profile.php"><i class="fas fa-user-circle mr-3"></i>Profile</a>
+					</li>
+
+					<li>
 						<a href="signout.php"><i class="fas fa-sign-out-alt mr-3"></i>Sign Out</a>
 					</li>
 					  
@@ -117,61 +119,51 @@ $reservations_results = $reservations_stmt->fetchAll();
 
   		<div id="content" class="p-4 p-md-5 pt-5">
 		
-          <h1>CUSTOMER FORM</h1>
-<form method="post">
-<input type="text" name="first_name" placeholder="first name" required>
-<input type="text" name="last_name" placeholder="last name" required>
-<input type="text" name="address" placeholder="address" required>
-<input type="text" name="zipcode" placeholder="zip code" required>
-<input type="text" name="city" placeholder="city" required>
-<input type="text" name="country" placeholder="country" required>
-<input type="tel" name="telephone" placeholder="telephone" required>
-<input type="email" name="email" placeholder="email" required>
-<input type="submit" name="customer" value="Submit">
-</form>
+			<table>
 
-<?php
-echo '<br/><br/>';
-if (isset($_POST['customer']))
-{
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $address = $_POST['address'];
-    $zipcode = $_POST['zipcode'];
-    $city = $_POST['city'];
-    $country = $_POST['country'];
-    $telephone = $_POST['telephone'];
-    $email = $_POST['email'];
-    var_dump($db->addcustomer($first_name, $last_name, $address, $zipcode, $city, $country, $telephone, $email));
-}
-?>
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>First Name</td>
+						<td>Last Name</td>
+						<td>Address</td>
+						<td>Zip</td>
+						<td>City</td>
+						<td>Country</td>
+						<td>Telephone</td>
+						<td>Email</td>
+					</tr>
+				</thead>
 
+				<tbody>
+					<?php foreach ($results as $customer): ?>
+					<tr>
+						<td><?=$customer['customer_id']?></td>
+						<td><?=$customer['customer_first_name']?></td>
+						<td><?=$customer['customer_last_name']?></td>
+						<td><?=$customer['customer_address']?></td>
+						<td><?=$customer['customer_zip_code']?></td>
+						<td><?=$customer['customer_city']?></td>
+						<td><?=$customer['customer_country']?></td>	
+						<td><?=$customer['customer_telephone']?></td>	
+						<td><?=$customer['customer_email']?></td>	
+					</tr>
+					<?php endforeach;?>
+				</tbody>
 
-<h1>SHOW CUSTOMERS</h1>
+			</table>
 
-<form method="post">
-<select name="customers_id" onchange="this.form.submit()">
-<option hidden disabled selected value> -- select customer -- </option>
-    <?php foreach ($customers_results as $customers):?>
-     
-        <br><option value="<?=$customers['id']?>"><?=$customers['customer_first_name'], str_repeat('&nbsp;', 1), $customers['customer_last_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
-<input type="hidden" name="show_customers">
-</form>
+			<div class="page">
 
-<?php
-echo '<pre>';
-if (isset($_POST['show_customers']))
-{
-    $id = $_POST['customers_id'];
-    print_r($db->showcustomers($id));
-}
-echo '</pre>';
-echo '<br/><br/>';
-?>
+				<?php if ($page > 1): ?>
+				<a class="left" href="customers.php?page=<?=$page-1?>"><i class="fas fa-angle-double-left"></i></a>
+				<?php endif; ?>
+
+				<?php if ($page*$records_per_page < $num_customers): ?>
+				<a class="right" href="customers.php?page=<?=$page+1?>"><i class="fas fa-angle-double-right"></i></a>
+				<?php endif; ?>
+				
+			</div>
   
 		</div>
 

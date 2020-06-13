@@ -27,7 +27,7 @@ $num_rooms = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
-	<link rel="stylesheet" href="css/room.css">
+	<link rel="stylesheet" href="css/table.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -71,11 +71,11 @@ $num_rooms = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 					</li>		  
 			  
 		  			<li>
-		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
+		  				<a href="customers.php?page=1"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li>
-		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
+		  				<a href="reservations.php?page=1"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 					</li>
 					  
 					<li>
@@ -120,6 +120,7 @@ $num_rooms = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
   		<div id="content" class="p-4 p-md-5 pt-5">
 
 			<table>
+
 				<thead>
 					<tr>
 						<td>#</td>
@@ -129,7 +130,7 @@ $num_rooms = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 						<td>Room Floor</td>
 						<td>Room Type</td>
 						<td>Room Description</td>
-						<td>Actions</td>
+						<td class="actions">Actions</td>
 					</tr>
 				</thead>
 

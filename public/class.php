@@ -40,22 +40,27 @@ class Database
 
     public function disconnect()
     {
+        // disconnects db connection
         $this->pdo = null;
         return true;
     }
 
     public function login($username, $password)
     {
-        // selects username and password. checks if data submitted matches in db.
+        // selects username and password. checks if data submitted matches in db
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name=:username");
         $stmt->execute(array(':username'=>$username));
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // if values from form post matches the other query will run
         if($stmt->rowCount() > 0) {
+            // verify password
             if(password_verify($password, $user['user_password']))
             {
+                // query succesful
                 $_SESSION['user_session'] = $user['id'];
                 return true;
             } else {
+                // error
                 return false;
             }
         }
@@ -63,11 +68,12 @@ class Database
     
     public function loggedin()
     {
-        // checks if user is already logged in with sessions.
+        // checks if user is already logged in with sessions
        if(isset($_SESSION['user_session']))
         {
             $user_id = $_SESSION['user_session'];
-            $stmt = $this->pdo->prepare("SELECT id FROM users WHERE id=:user_id");
+            // selects the user with the id from session user
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id=:user_id");
             $stmt->execute(array(":user_id"=>$user_id));
             $stmt->fetch(PDO::FETCH_ASSOC);
             return true;
@@ -76,13 +82,13 @@ class Database
 
     public function redirect($url)
     {
-        // redirect to specific page.
+        // redirect to specific page
         header("Location: $url");
     }
 
     public function showroom($category)
     {
-        // show rooms by category type.
+        // show rooms by category type
         $stmt = $this->pdo->prepare("SELECT * FROM rooms where category_id=:category");
         $stmt->execute(array(":category"=>$category));
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -91,11 +97,11 @@ class Database
 
     public function addroom($room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
     {
-        // select all from rooms with the given room number and floor.
+        // select all from rooms with the given room number and floor
         $select = $this->pdo->prepare("SELECT * FROM rooms WHERE room_number=:room_number AND room_floor=:room_floor");
         $select->execute(array(':room_number'=>$room_number, ':room_floor'=>$room_floor));
 
-        // query to add a room.
+        // query to add a room
         $stmt = $this->pdo->prepare("INSERT INTO rooms (room_name, room_price, room_number, room_floor, category_id, room_description) VALUES (:name, :price, :number, :floor, :category_id, :description)");
 
         // binding the variable data.
@@ -108,12 +114,16 @@ class Database
 
         // checks if there are no duplicates.
         if($select->rowCount() > 0):
-            return $_SESSION['message'] = 'room already exists';
+            // room already exists and query stops here
+            return $_SESSION['create_room_message'] = 'Room already exists!';
         else:
+            // run the query
             if($stmt->execute() ):
-                return $_SESSION['message'] = 'room added';
+                // new room has been added
+                return $_SESSION['create_room_message'] = 'Room has been added!';
             else:
-                return $_SESSION['message'] = 'error';
+                // error message
+                return $_SESSION['create_room_message'] = 'ERROR!';
             endif; 
         endif;       
     }
@@ -128,11 +138,14 @@ class Database
 
     public function addcustomer($first_name, $last_name, $address, $zipcode, $city, $country, $telephone, $email)
     {
+        // query to check if the user already exists, with the given email and telephone
         $select = $this->pdo->prepare("SELECT * FROM customers WHERE customer_telephone=:telephone OR customer_email=:email");
         $select->execute(array(':telephone'=>$telephone, ':email'=>$email));
 
+        // preparing the query to insert into the customer table
         $stmt = $this->pdo->prepare("INSERT INTO customers (customer_first_name, customer_last_name, customer_address, customer_zip_code, customer_city, customer_country, customer_telephone, customer_email) VALUES (:first_name, :last_name, :address, :zipcode, :city, :country, :telephone, :email)");
 
+        // binding the values 
         $stmt->bindParam(':first_name', $first_name);
         $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':address', $address);
@@ -142,21 +155,28 @@ class Database
         $stmt->bindParam(':telephone', $telephone);
         $stmt->bindParam(':email', $email);
 
+        // duplicate check to make sure no duplicate records exist in database
         if($select->rowCount() > 0):
+            // when the select query selected something from database there is duplicate and  code will not continue
             return false;
         else:
+            // executing the query if no results return from the select query
             if($stmt->execute() ):
+                // return true when finished
                 return true;
             else:
+                // error message when failed
                 return false;
             endif; 
         endif;     
     }
 
-    public function editroom($room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description, $id)
+    public function editroom( $room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description)
     {
-        $update = $this->pdo->prepare("UPDATE rooms SET room_id=:room_id, room_name=:name, room_price=:price, room_number=:number, room_floor=:floor, category_id=:category, room_description=:description WHERE room_id=:id");
-
+        // updating the room query
+        $update = $this->pdo->prepare("UPDATE rooms SET room_name=:name, room_price=:price, room_number=:number, room_floor=:floor, category_id=:category, room_description=:description WHERE room_id=:room_id");
+  
+        // the values for the query
         $update->bindParam(':room_id', $room_id);
         $update->bindParam(':name', $room_name);
         $update->bindParam(':price', $room_price);
@@ -164,49 +184,73 @@ class Database
         $update->bindParam(':floor', $room_floor);
         $update->bindParam(':category', $category_id);
         $update->bindParam(':description', $room_description);
-        $update->bindParam(':id', $id);
-
-        $update->execute();
-
-        return true;
+        
+        // executing the query 
+        if($update->execute() ):
+            // when success leave positive message
+            return $_SESSION['update_room_message'] = 'Room has been modified!';
+        else:
+            // when failure leave error message
+            return $_SESSION['update_room_message'] = 'ERROR!';
+        endif;
     }
 
-    public function showcustomers($id) {
-        $stmt = $this->pdo->prepare("SELECT * FROM customers WHERE id=:customer_id");
-        $stmt->execute(array(":customer_id"=>$id));
+    public function showcustomers($customer_id) {
+        // show the customer by selected id
+        $stmt = $this->pdo->prepare("SELECT * FROM customers WHERE customer_id=:customer_id");
+        $stmt->execute(array(":customer_id"=>$customer_id));
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 
     public function bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id)
     {
+        // selects something from database with the given values
         $select = $this->pdo->prepare("SELECT * FROM reservations WHERE reservation_start=:start_date AND reservation_end=:end_date AND room_id=:room_id");
         $select->execute(array(':start_date'=>$reservation_start_date, ':end_date'=>$reservation_end_date, ':room_id'=>$room_id));
 
+        // preparing the insert statement, does not execute it yet
         $stmt = $this->pdo->prepare("INSERT INTO reservations (reservation_start, reservation_end, customer_id, room_id) VALUES (:start_date, :end_date, :customer_id, :room_id)");
 
+        // binding the params of the placeholders in the query
         $stmt->bindParam(':start_date', $reservation_start_date);
         $stmt->bindParam(':end_date', $reservation_end_date);
         $stmt->bindParam(':customer_id', $customer_id);
         $stmt->bindParam(':room_id', $room_id);
 
+        // checks if the select query returns something
         if($select->rowCount() > 0):
+            // returned query is above 0 and there is a duplicate
             return 'room already booked';
         else:
+            // execute the query
             if($stmt->execute()):
+                // successful and room has been booked
                 return 'room has been booked';
             else:
+                // error code
                 return 'error';
             endif; 
         endif;   
     }
 
-    public function showreservation($id)
+    public function showreservation($reservation_id)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM reservations WHERE id=:reservation_id");
-        $stmt->execute(array(":reservation_id"=>$id));
+        // show the reservation of the selected reservation id
+        $stmt = $this->pdo->prepare("SELECT * FROM reservations WHERE reservation_id=:reservation_id");
+        $stmt->execute(array(":reservation_id"=>$reservation_id));
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    public function addcategory($category_name)
+    {
+        // add a new category to the categories table
+        $stmt = $this->pdo->prepare("INSERT INTO categories (category_name) VALUES (:category_name)");
+        // bind the values from the form post
+        $stmt->bindParam(':category_name', $category_name);
+        $stmt->execute();
+        return true;
     }
 }
 

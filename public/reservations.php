@@ -6,21 +6,18 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-$rooms = "SELECT * FROM rooms";
-$rooms_stmt = $db->pdo->query($rooms);
-$rooms_results = $rooms_stmt->fetchAll();
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$customers = "SELECT * FROM customers";
-$customers_stmt = $db->pdo->query($customers);
-$customers_results = $customers_stmt->fetchAll();
+$records_per_page = 10;
 
-$categories = "SELECT * FROM categories";
-$categories_stmt = $db->pdo->query($categories);
-$categories_results = $categories_stmt->fetchAll();
+$stmt =  $db->pdo->prepare("SELECT * FROM reservations INNER JOIN rooms ON rooms.room_id = reservations.room_id INNER JOIN customers ON customers.customer_id = reservations.customer_id ORDER BY reservation_id LIMIT :current_page, :record_per_page");
+$stmt->bindValue(':current_page', ($page-1)*$records_per_page, PDO::PARAM_INT);
+$stmt->bindValue(':record_per_page', $records_per_page, PDO::PARAM_INT);
+$stmt->execute();
 
-$reservations = "SELECT * FROM rooms INNER JOIN reservations ON rooms.room_id = reservations.room_id";
-$reservations_stmt = $db->pdo->query($reservations);
-$reservations_results = $reservations_stmt->fetchAll();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$num_reservation = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 ?> 
 
 <!DOCTYPE html>
@@ -30,6 +27,7 @@ $reservations_results = $reservations_stmt->fetchAll();
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Hotel California</title>
 	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/table.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -52,11 +50,11 @@ $reservations_results = $reservations_stmt->fetchAll();
 				<ul class="list-unstyled components">
 
 					<li>
-						<a href="dashboard.php"><span class="fas fa-tachometer-alt mr-3"></span>Dashboard</a>
+						<a href="dashboard.php"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
 		  			</li>
 		  
 					<li>
-					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fas fa-hotel mr-3"></span>Rooms</a>
+					  	<a href="#submenuRooms" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-hotel mr-3"></i>Rooms</a>
 
               			<ul class="collapse list-unstyled" id="submenuRooms">
 
@@ -73,11 +71,11 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 		  			<li>
-		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
+		  				<a href="customers.php?page=1"><i class="fas fa-address-card mr-3"></i>Customers</a>
 					</li>
 					  
 		  			<li class="active">
-		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
+		  				<a href="reservations.php?page=1"><i class="fas fa-user-alt mr-3"></i>Reservations</a>
 		  			</li>
 				  
 					<li>
@@ -106,6 +104,10 @@ $reservations_results = $reservations_stmt->fetchAll();
 					</li>
 
 					<li>
+						<a href="profile.php"><i class="fas fa-user-circle mr-3"></i>Profile</a>
+					</li>
+
+					<li>
 						<a href="signout.php"><i class="fas fa-sign-out-alt mr-3"></i>Sign Out</a>
 					</li>
 					  
@@ -116,75 +118,49 @@ $reservations_results = $reservations_stmt->fetchAll();
 		</nav>
 
   		<div id="content" class="p-4 p-md-5 pt-5">
-		
-          <h1>BOOK RESERVATION</h1>
 
+		  <table>
 
-<form method="post">
-<label for="start date">startdate</label>
-<input type="date" min="<?php echo date('Y-m-d')?>" name="start_date" placeholder="start_date">
-<label for="start date">end date</label>
-<input type="date" min="<?php echo date('Y-m-d')?>" name="end_date" placeholder="end_date">
-<select name="customer_id">
-<option hidden disabled selected value> -- select which customer you are -- </option>
-    <?php foreach ($customers_results as $customers):?>
-     
-        <br><option value="<?=$customers['id']?>"><?=$customers['customer_first_name'], str_repeat('&nbsp;', 1), $customers['customer_last_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>Start Date</td>
+						<td>End Date</td>
+						<td>Customer Identity</td>
+						<td>Customer Name</td>
+						<td>Room Identity</td>
+						<td>Room Name</td>
+					</tr>
+				</thead>
 
-<select name="select_room">
-<option hidden disabled selected value> -- select which room you wanna book -- </option>
-<?php foreach ($rooms_results as $key => $room):?>
-    <option value="<?=$room['room_id']?>"><?=$room['room_name']?></option>
-<?php endforeach; ?>
-</select>
-<input type="submit" name="book_room" value="book room">
+				<tbody>
+					<?php foreach ($results as $reservation): ?>
+					<tr>
+						<td><?=$reservation['reservation_id']?></td>
+						<td><?=$reservation['reservation_start']?></td>
+						<td><?=$reservation['reservation_end']?></td>
+						<td><?=$reservation['customer_id']?></td>
+						<td><?=$reservation['customer_first_name']?>&nbsp;<?=$reservation['customer_last_name']?></td>
+						<td><?=$reservation['room_id']?></td>
+						<td><?=$reservation['room_name']?></td>	
+					</tr>
+					<?php endforeach;?>
+				</tbody>
 
-</form>
+			</table>
 
-<?php
-if (isset($_POST['book_room']))
-{
-    $reservation_start_date = $_POST['end_date'];
-    $reservation_end_date = $_POST['start_date'];
-    $customer_id = $_POST['customer_id'];
-    $room_id = $_POST['select_room'];
-    
-    print_r($db->bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id));
-}
-?>
+			<div class="page">
 
-<br/><br/>
+				<?php if ($page > 1): ?>
+				<a class="left" href="reservations.php?page=<?=$page-1?>"><i class="fas fa-angle-double-left"></i></a>
+				<?php endif; ?>
 
-<h1>SHOW RESERVATIONS</h1>
-<form method="post">
-
-<select name="res_id" onchange="this.form.submit()">
-<option hidden disabled selected value> -- show which room got booked -- </option>
-    <?php foreach ($reservations_results as $reservation):?>
-     
-        <br><option value="<?=$reservation['id']?>"><?=$reservation['room_name']?></option>
-    
-    
-    <?php endforeach;?>
-</select>
-<input type="hidden" name="show_res">
-</form>
-
-<pre>
-<?php
-if (isset($_POST['show_res']))
-{
-    $id = $_POST['res_id'];
-    print_r($db->showreservation($id));
-}
-?>
-</pre>
-
-  
+				<?php if ($page*$records_per_page < $num_reservation): ?>
+				<a class="right" href="reservations.php?page=<?=$page+1?>"><i class="fas fa-angle-double-right"></i></a>
+				<?php endif; ?>
+				
+			</div>
+		  
 		</div>
 
 	</div>

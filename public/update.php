@@ -6,25 +6,25 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-if(isset($_POST['update']))
+if(isset($_POST['update_room']))
 {
-    $room_id = isset($_POST['room_id']) ? $_POST['room_id'] : NULL;
-    $room_name = isset($_POST['room_name']) ? $_POST['room_name'] : '';
-    $room_price = isset($_POST['room_price']) ? $_POST['room_price'] : '';
-    $room_number = isset($_POST['room_number']) ? $_POST['room_number'] : '';
-    $room_floor = isset($_POST['room_floor']) ? $_POST['room_floor'] : '';
-    $category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
-    $room_description = isset($_POST['room_description']) ? $_POST['room_description'] : '';
-    $id = $_GET['id'];
-    $db->editroom($room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description, $id);
-    $db->redirect('rooms.php?page=1');
+    $room_id = $_POST['room_id'];
+    $room_name = $_POST['room_name'];
+    $room_price = $_POST['room_price'];
+    $room_number = $_POST['room_number'];
+    $room_floor = $_POST['room_floor'];
+    $category_id = $_POST['category_id'];
+    $room_description = $_POST['room_description'];
+    $db->editroom($room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description);
 }
 
-    $stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id WHERE room_id = :room_id");
-    $stmt->execute(array(':room_id'=>$_GET['id']));
-    $results = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-
+$stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id WHERE room_id = :room_id");
+$stmt->execute(array(':room_id'=>$_GET['id']));
+$results = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+$select = $db->pdo->prepare("SELECT * FROM categories");
+$select->execute();
+$categories = $select->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -110,6 +110,10 @@ if(isset($_POST['update']))
 					</li>
 
 					<li>
+						<a href="profile.php"><i class="fas fa-user-circle mr-3"></i>Profile</a>
+					</li>
+
+					<li>
 						<a href="signout.php"><i class="fas fa-sign-out-alt mr-3"></i>Sign Out</a>
 					</li>
 					  
@@ -120,20 +124,96 @@ if(isset($_POST['update']))
 		</nav>
 
   		<div id="content" class="p-4 p-md-5 pt-5">
-        
-            <form action="update.php?id=<?=$results['room_id']?>" method="post">
 
-                <input type="number" name="room_id" value="<?=$results['room_id']?>" placeholder="<?=$results['room_id']?>">
-                <input type="text" name="room_name" value="<?=$results['room_name']?>" placeholder="<?=$results['room_name']?>">
-                <input type="text" name="room_price" value="<?=$results['room_price']?>" placeholder="<?=$results['room_price']?>">
-                <input type="text" name="room_number" value="<?=$results['room_number']?>" placeholder="<?=$results['room_number']?>">
-                <input type="text" name="room_floor" value="<?=$results['room_floor']?>" placeholder="<?=$results['room_floor']?>">
-                <input type="text" name="category_id" value="<?=$results['category_id']?>" placeholder="<?=$results['category_id']?>" min="1" max="4">
-                <input type="text" name="room_description" value="<?=$results['room_description']?>" placeholder="<?=$results['room_description']?>">
-                <input type="submit" name="update" value="update">
-        
-            </form>
+		  <form action="update.php?id=<?=$results['room_id']?>" method="post">
 
+  					<div class="form-row">
+						
+						<div class="col">
+
+							<label for="room_id">Room Identity</label>
+
+							<input type="text" class="form-control" name="room_id" value="<?=$results['room_id']?>" readonly>
+						
+						</div>
+
+   	 					<div class="col">
+
+							<label for="room_name">Room Name</label>
+
+							<input type="text" class="form-control" name="room_name" id="room_name" value="<?=$results['room_name']?>">			
+
+						</div>
+
+					</div>
+
+					<div class="form-row mt-4">
+
+						<div class="col">
+
+							<label for="room_price">Room Price</label>
+
+							<input type="number" class="form-control" name="room_price" id="room_price" value="<?=$results['room_price']?>">
+	
+						</div>
+
+						<div class="col">
+
+							<label for="room_number">Room Number</label>
+
+							<input type="number" class="form-control" name="room_number" id="room_number" value="<?=$results['room_number']?>">
+
+						</div>
+					
+					</div>
+
+					<div class="form-row mt-4">
+						
+						<div class="col">
+
+							<label for="room_floor">Room Floor</label>
+
+							<input type="number" class="form-control" name="room_floor" id="room_floor" value="<?=$results['room_floor']?>">
+
+						</div>
+
+						<div class="col">
+
+							<label for="category_id">Room Type</label>
+
+							<select name="category_id" class="form-control" id="category_id">
+
+								<option hidden selected value="<?=$results['category_id']?>"><?=$results['category_name']?></option>
+
+								<?php foreach ($categories as $category): ?>
+
+									<option value="<?=$category['category_id']?>"><?=$category['category_name']?></option>
+
+								<?php endforeach; ?>
+
+							</select>
+
+						</div>
+
+					</div>
+
+					<div class="form-group mt-4">
+
+						<label for="room_description">Room Description</label>
+						
+						<textarea name="room_description" class="form-control" id="room_description" rows="5"><?=$results['room_description']?></textarea>
+						
+					</div>
+
+					<button type="submit" name="update_room" class="btn btn-primary">Save Changes</button>
+
+					<?php if (isset($_SESSION['update_room_message'])):
+						echo $_SESSION['update_room_message']; 
+						unset($_SESSION['update_room_message']);
+					endif; ?>
+				
+				</form>
+    
         </div>
 
 	</div>

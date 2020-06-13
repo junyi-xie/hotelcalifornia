@@ -16,10 +16,6 @@ table thead td {
     font-size: 14px;
 }
 
-table thead td:last-child {
-    text-align: right;
-}
-
 table tbody tr {
     border-bottom: 1px solid #d3dae0;
 }
@@ -55,7 +51,6 @@ table tbody tr td:nth-child(1) {
 
 table tbody tr td.actions {
     padding: 8px;
-    text-align: right;
 }
 
 table tbody tr td.actions .edit,
