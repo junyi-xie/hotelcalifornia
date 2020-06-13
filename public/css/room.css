@@ -16,6 +16,10 @@ table thead td {
     font-size: 14px;
 }
 
+table thead td:last-child {
+    text-align: right;
+}
+
 table tbody tr {
     border-bottom: 1px solid #d3dae0;
 }
@@ -26,6 +30,11 @@ table tbody tr:nth-child(even) {
 
 table tbody tr:hover {
     background-color: #494ca2;
+}
+
+table tbody tr:hover td.actions .edit, 
+table tbody tr:hover td.actions .delete {
+    color: #ffffff;
 }
 
 table tbody tr:hover td {
@@ -50,28 +59,9 @@ table tbody tr td.actions {
 }
 
 table tbody tr td.actions .edit,
-table tbody tr td.actions .trash {
-    display: inline-flex;
-    text-align: right;
+table tbody tr td.actions .delete {
     text-decoration: none;
-    color: #ffffff;
-    padding: 10px 12px;
-}
-
-table tbody tr td.actions .trash {
-    background-color: #b73737;
-}
-
-table tbody tr td.actions .trash:hover {
-    background-color: #a33131;
-}
-
-table tbody tr td.actions .edit {
-    background-color: #37afb7;
-}
-
-table tbody tr td.actions .edit:hover {
-    background-color: #319ca3;
+    color: #494ca2;
 }
 
 .page a {

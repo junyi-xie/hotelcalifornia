@@ -8,16 +8,16 @@ if(!$db->loggedin())
 
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-$records_per_page = 9;
+$records_per_page = 10;
 
 $stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_id LIMIT :current_page, :record_per_page");
 $stmt->bindValue(':current_page', ($page-1)*$records_per_page, PDO::PARAM_INT);
 $stmt->bindValue(':record_per_page', $records_per_page, PDO::PARAM_INT);
 $stmt->execute();
 
-$rooms_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
+$num_rooms = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -104,6 +104,10 @@ $num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 					</li>
 
 					<li>
+						<a href="profile.php"><i class="fas fa-user-circle mr-3"></i>Profile</a>
+					</li>
+
+					<li>
 						<a href="signout.php"><i class="fas fa-sign-out-alt mr-3"></i>Sign Out</a>
 					</li>
 					  
@@ -119,18 +123,18 @@ $num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 				<thead>
 					<tr>
 						<td>#</td>
-						<td>Name</td>
-						<td>Price</td>
-						<td>Number</td>
-						<td>Floor</td>
-						<td>Category</td>
-						<td>Description</td>
-						<td></td>
+						<td>Room Name</td>
+						<td>Room Price</td>
+						<td>Room Number</td>
+						<td>Room Floor</td>
+						<td>Room Type</td>
+						<td>Room Description</td>
+						<td>Actions</td>
 					</tr>
 				</thead>
 
 				<tbody>
-					<?php foreach ($rooms_results as $room): ?>
+					<?php foreach ($results as $room): ?>
 					<tr>
 						<td><?=$room['room_id']?></td>
 						<td><?=$room['room_name']?></td>
@@ -140,8 +144,8 @@ $num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 						<td><?=$room['category_name']?></td>
 						<td><?=$room['room_description']?></td>	
 						<td class="actions">
-                    		<a href="update.php?id=<?=$room['room_id']?>" class="edit"><i class="fas fa-pen"></i></a>
-                    		<a href="delete.php?id=<?=$room['room_id']?>" class="trash"><i class="fas fa-trash-alt"></i></a>
+                    		<a href="update.php?id=<?=$room['room_id']?>" class="edit"><i class="fas fa-edit mr-2"></i>Edit</a>
+                    		<a href="delete.php?id=<?=$room['room_id']?>" class="delete"><i class="fas fa-trash-alt mr-2 ml-3"></i>Delete</a>
                 		</td>
 					</tr>
 					<?php endforeach;?>
@@ -150,13 +154,16 @@ $num_contacts = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 			</table>
 
 			<div class="page">
-		<?php if ($page > 1): ?>
-		<a class="left" href="rooms.php?page=<?=$page-1?>"><i class="fas fa-angle-double-left"></i></a>
-		<?php endif; ?>
-		<?php if ($page*$records_per_page < $num_contacts): ?>
-		<a class="right" href="rooms.php?page=<?=$page+1?>"><i class="fas fa-angle-double-right"></i></a>
-		<?php endif; ?>
-	</div>
+
+				<?php if ($page > 1): ?>
+				<a class="left" href="rooms.php?page=<?=$page-1?>"><i class="fas fa-angle-double-left"></i></a>
+				<?php endif; ?>
+
+				<?php if ($page*$records_per_page < $num_rooms): ?>
+				<a class="right" href="rooms.php?page=<?=$page+1?>"><i class="fas fa-angle-double-right"></i></a>
+				<?php endif; ?>
+				
+			</div>
 		  
 		</div>
 
