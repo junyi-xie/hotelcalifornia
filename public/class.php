@@ -108,12 +108,12 @@ class Database
 
         // checks if there are no duplicates.
         if($select->rowCount() > 0):
-            return 'room already exists';
+            return $_SESSION['message'] = 'room already exists';
         else:
             if($stmt->execute() ):
-                return 'room added';
+                return $_SESSION['message'] = 'room added';
             else:
-                return 'error';
+                return $_SESSION['message'] = 'error';
             endif; 
         endif;       
     }
