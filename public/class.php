@@ -212,6 +212,7 @@ class Database
         // preparing the insert statement, does not execute it yet
         $stmt = $this->pdo->prepare("INSERT INTO reservations (reservation_start, reservation_end, customer_id, room_id) VALUES (:start_date, :end_date, :customer_id, :room_id)");
 
+        echo $lastID = $this->pdo->lastInsertId();
         // binding the params of the placeholders in the query
         $stmt->bindParam(':start_date', $reservation_start_date);
         $stmt->bindParam(':end_date', $reservation_end_date);
