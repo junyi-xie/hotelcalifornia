@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 13, 2020 at 08:42 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.3
+-- Host: localhost
+-- Generation Time: Jun 16, 2020 at 02:02 PM
+-- Server version: 10.4.10-MariaDB
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -57,7 +57,7 @@ CREATE TABLE `customers` (
   `customer_zip_code` varchar(10) NOT NULL,
   `customer_city` varchar(150) NOT NULL,
   `customer_country` varchar(150) NOT NULL,
-  `customer_telephone` int(11) NOT NULL,
+  `customer_telephone` varchar(15) NOT NULL,
   `customer_email` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -66,14 +66,15 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `customer_first_name`, `customer_last_name`, `customer_address`, `customer_zip_code`, `customer_city`, `customer_country`, `customer_telephone`, `customer_email`) VALUES
-(1, 'Jun Yi', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636560377, 'yunyi.xie@outlook.com'),
-(2, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 647185812, '6009569@mborijnland.nl'),
-(3, 'Appel', 'Banaan', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636424124, 'yunyitec21@gmail.com'),
-(4, 'Banaan', 'Appelboom', 'Appelstraat 1', '8419IP', 'Amsterdam', 'Netherlands', 674142124, 'kouhie123@gmail.com'),
-(5, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636560347, 'yunyi.xie11@outlook.com'),
-(6, 'appww', 'rrurw', '2121ew', '321w', 'den haag', 'nederland', 612322333, 'bob@email.nl'),
-(7, 'bobby', 'bobsonb', 'bobadres', '4912QE', 'bobcity', 'nederland', 647412842, 'bob.bobbby.bob@email.com'),
-(8, 'appel boom', 'aaaaaaaaaaaar', 'aapelstraat', '4914RQ', 'den haag', 'nederland', 683712941, 'appelbooom@email.com');
+(1, 'Jun Yi', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636560377', 'yunyi.xie@outlook.com'),
+(2, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '647185812', '6009569@mborijnland.nl'),
+(3, 'Appel', 'Banaan', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636424124', 'yunyitec21@gmail.com'),
+(4, 'Banaan', 'Appelboom', 'Appelstraat 1', '8419IP', 'Amsterdam', 'Netherlands', '674142124', 'kouhie123@gmail.com'),
+(5, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636560347', 'yunyi.xie11@outlook.com'),
+(6, 'appww', 'rrurw', '2121ew', '321w', 'den haag', 'nederland', '612322333', 'bob@email.nl'),
+(7, 'bobby', 'bobsonb', 'bobadres', '4912QE', 'bobcity', 'nederland', '647412842', 'bob.bobbby.bob@email.com'),
+(8, 'appel boom', 'aaaaaaaaaaaar', 'aapelstraat', '4914RQ', 'den haag', 'nederland', '683712941', 'appelbooom@email.com'),
+(9, 'Yun', 'Xie', 'Neherkade 2178', '2521 RM', 'city', 'Niger', '636560323', 'yunyi.xie441@outlook.com');
 
 -- --------------------------------------------------------
 
@@ -230,7 +231,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reservations`

@@ -136,20 +136,20 @@ class Database
         return true;
     }
 
-    public function addcustomer($first_name, $last_name, $address, $zipcode, $city, $country, $telephone, $email)
+    public function addcustomer($first_name, $last_name, $address, $zip, $city, $country, $telephone, $email)
     {
         // query to check if the user already exists, with the given email and telephone
         $select = $this->pdo->prepare("SELECT * FROM customers WHERE customer_telephone=:telephone OR customer_email=:email");
         $select->execute(array(':telephone'=>$telephone, ':email'=>$email));
 
         // preparing the query to insert into the customer table
-        $stmt = $this->pdo->prepare("INSERT INTO customers (customer_first_name, customer_last_name, customer_address, customer_zip_code, customer_city, customer_country, customer_telephone, customer_email) VALUES (:first_name, :last_name, :address, :zipcode, :city, :country, :telephone, :email)");
+        $stmt = $this->pdo->prepare("INSERT INTO customers (customer_first_name, customer_last_name, customer_address, customer_zip_code, customer_city, customer_country, customer_telephone, customer_email) VALUES (:first_name, :last_name, :address, :zip, :city, :country, :telephone, :email)");
 
         // binding the values 
         $stmt->bindParam(':first_name', $first_name);
         $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':zipcode', $zipcode);
+        $stmt->bindParam(':zip', $zip);
         $stmt->bindParam(':city', $city);
         $stmt->bindParam(':country', $country);
         $stmt->bindParam(':telephone', $telephone);
@@ -158,15 +158,15 @@ class Database
         // duplicate check to make sure no duplicate records exist in database
         if($select->rowCount() > 0):
             // when the select query selected something from database there is duplicate and  code will not continue
-            return false;
+            return $_SESSION['add_customer'] = 'Customer already exists!';
         else:
             // executing the query if no results return from the select query
             if($stmt->execute() ):
                 // return true when finished
-                return true;
+                return $_SESSION['add_customer'] = 'Customer has been added!';
             else:
-                // error message when failed
-                return false;
+                // error message when failedßß
+                return $_SESSION['add_customer'] = 'ERROR';
             endif; 
         endif;     
     }
@@ -250,6 +250,14 @@ class Database
         $stmt = $this->pdo->prepare("INSERT INTO categories (category_name) VALUES (:category_name)");
         // bind the values from the form post
         $stmt->bindParam(':category_name', $category_name);
+        $stmt->execute();
+        return true;
+    }
+
+    public function showroombycategory($category_id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM rooms WHERE category_id = :category_id");
+        $stmt->bindParam(':category_id', $category_id);
         $stmt->execute();
         return true;
     }
