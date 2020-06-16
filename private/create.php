@@ -6,26 +6,21 @@ if(!$db->loggedin())
  $db->redirect('signin.php');
 }
 
-if(isset($_POST['update_room']))
+if (isset($_POST['create_room']))
 {
-    $room_id = $_POST['room_id'];
-    $room_name = $_POST['room_name'];
-    $room_price = $_POST['room_price'];
-    $room_number = $_POST['room_number'];
-    $room_floor = $_POST['room_floor'];
+    $name = $_POST['room_name'];
+    $price = $_POST['room_price'];
+    $number = $_POST['room_number'];
+    $floor = $_POST['room_floor'];
     $category_id = $_POST['category_id'];
-    $room_description = $_POST['room_description'];
-    $db->editroom($room_id, $room_name, $room_price, $room_number, $room_floor, $category_id, $room_description);
+    $description = $_POST['room_description'];
+	$db->addroom($name, $price, $number, $floor, $category_id, $description);
 }
 
-$stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id WHERE room_id = :room_id");
-$stmt->execute(array(':room_id'=>$_GET['id']));
-$results = $stmt->fetch(PDO::FETCH_ASSOC);
-	
-$select = $db->pdo->prepare("SELECT * FROM categories");
-$select->execute();
-$categories = $select->fetchAll(PDO::FETCH_ASSOC);
-?>
+$stmt = $db->pdo->prepare("SELECT * FROM categories");
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +28,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Hotel California</title>
-	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="assets/css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -64,45 +59,45 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
               			<ul class="collapse list-unstyled show" id="submenuRooms">
 
-                			<li class="active">
+                			<li>
                     			<a href="rooms.php?page=1"><i class="fas fa-bed mr-3"></i>Show Rooms</a>
 							</li>
 							
-               	 			<li>
+               	 			<li class="active">
                     			<a href="create.php"><i class="fas fa-plus mr-3-alt"></i>Add Room</a>
                 			</li>
         
 						  </ul>
 						  
-					</li>
+					</li>	
 
 		  			<li>
-		  				<a href="customers.php"><span class="fas fa-address-card mr-3"></span>Customers</a>
+		  				<a href="customers.php?page=1"><span class="fas fa-address-card mr-3"></span>Customers</a>
 					</li>
 					  
 		  			<li>
-		  				<a href="reservations.php"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
+		  				<a href="reservations.php?page=1"><span class="fas fa-user-alt mr-3"></span>Reservations</a>
 		  			</li>
 				  
                     <li>
-					  	<a href="#submenuPages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
+					    <a href="#submenuPages" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-paper-plane mr-3"></i>Pages</a>
 
               			<ul class="collapse list-unstyled" id="submenuPages">
 
 						  	<li>
-                    			<a href="#"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
+                    			<a href="location.php"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
 							</li>
 
                 			<li>
-                    			<a href="#"><i class="far fa-address-book mr-3"></i>Contact</a>
+                    			<a href="contact.php"><i class="far fa-address-book mr-3"></i>Contact</a>
 							</li>
 									
 							<li>
-								<a href="#"><i class="fas fa-clock mr-3"></i>Openinghours</a>
+								<a href="openinghours.php"><i class="fas fa-clock mr-3"></i>Openinghours</a>
 							</li>
 
 							<li>
-								<a href="#"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
+								<a href="alerts.php"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
 							</li>
         
 						</ul>
@@ -124,8 +119,10 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 		</nav>
 
   		<div id="content" class="p-4 p-md-5 pt-5">
-
-		  <form action="update.php?id=<?=$results['room_id']?>" method="post">
+		
+        	<main>
+				
+				<form action="create.php" method="post">
 
   					<div class="form-row">
 						
@@ -133,7 +130,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<label for="room_id">Room Identity</label>
 
-							<input type="text" class="form-control" name="room_id" value="<?=$results['room_id']?>" readonly>
+							<input class="form-control" type="text" placeholder="Auto Increment" readonly>
 						
 						</div>
 
@@ -141,7 +138,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<label for="room_name">Room Name</label>
 
-							<input type="text" class="form-control" name="room_name" id="room_name" value="<?=$results['room_name']?>">			
+							<input type="text" class="form-control" name="room_name" id="room_name" placeholder="Input name...">			
 
 						</div>
 
@@ -153,7 +150,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<label for="room_price">Room Price</label>
 
-							<input type="number" class="form-control" name="room_price" id="room_price" value="<?=$results['room_price']?>">
+							<input type="number" class="form-control" name="room_price" id="room_price" placeholder="Input price...">
 	
 						</div>
 
@@ -161,7 +158,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<label for="room_number">Room Number</label>
 
-							<input type="number" class="form-control" name="room_number" id="room_number" value="<?=$results['room_number']?>">
+							<input type="number" class="form-control" name="room_number" id="room_number" placeholder="Input number...">
 
 						</div>
 					
@@ -173,7 +170,7 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<label for="room_floor">Room Floor</label>
 
-							<input type="number" class="form-control" name="room_floor" id="room_floor" value="<?=$results['room_floor']?>">
+							<input type="number" class="form-control" name="room_floor" id="room_floor" placeholder="Input floor...">
 
 						</div>
 
@@ -183,9 +180,9 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 							<select name="category_id" class="form-control" id="category_id">
 
-								<option hidden selected value="<?=$results['category_id']?>"><?=$results['category_name']?></option>
+								<option hidden disabled selected value>Select Category</option>
 
-								<?php foreach ($categories as $category): ?>
+								<?php foreach ($results as $category): ?>
 
 									<option value="<?=$category['category_id']?>"><?=$category['category_name']?></option>
 
@@ -201,26 +198,28 @@ $categories = $select->fetchAll(PDO::FETCH_ASSOC);
 
 						<label for="room_description">Room Description</label>
 						
-						<textarea name="room_description" class="form-control" id="room_description" rows="5"><?=$results['room_description']?></textarea>
+						<textarea name="room_description" class="form-control" id="room_description" rows="5" placeholder="Input description..."></textarea>
 						
 					</div>
 
-					<button type="submit" name="update_room" class="btn btn-primary">Save Changes</button>
+					<button type="submit" name="create_room" class="btn btn-primary">Add Room</button>
 
-					<?php if (isset($_SESSION['update_room_message'])):
-						echo $_SESSION['update_room_message']; 
-						unset($_SESSION['update_room_message']);
+					<?php if (isset($_SESSION['create_room_message'])):
+						echo $_SESSION['create_room_message']; 
+						unset($_SESSION['create_room_message']);
 					endif; ?>
 				
 				</form>
-    
-        </div>
+
+			</main> 
+  
+		</div>
 
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-	<script src="js/main.js"></script>	
+	<script src="assets/js/main.js"></script>	
 </body>
 </html>

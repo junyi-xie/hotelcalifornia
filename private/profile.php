@@ -1,5 +1,10 @@
 <?php
 require 'class.php';
+
+if(!$db->loggedin())
+{
+ $db->redirect('signin.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +13,7 @@ require 'class.php';
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Hotel California</title>
-	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="assets/css/admin.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
@@ -65,19 +70,19 @@ require 'class.php';
               			<ul class="collapse list-unstyled" id="submenuPages">
 
 						  	<li>
-                    			<a href="#"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
+                    			<a href="location.php"><i class="fas fa-map-marker-alt mr-3"></i>Location</a>
 							</li>
 
                 			<li>
-                    			<a href="#"><i class="far fa-address-book mr-3"></i>Contact</a>
+                    			<a href="contact.php"><i class="far fa-address-book mr-3"></i>Contact</a>
 							</li>
 									
 							<li>
-								<a href="#"><i class="fas fa-clock mr-3"></i>Openinghours</a>
+								<a href="openinghours.php"><i class="fas fa-clock mr-3"></i>Openinghours</a>
 							</li>
 
 							<li>
-								<a href="#"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
+								<a href="alerts.php"><i class="fas fa-exclamation-triangle mr-3"></i>Alerts</a>
 							</li>
         
 						</ul>
@@ -109,6 +114,6 @@ require 'class.php';
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-	<script src="js/main.js"></script>	
+	<script src="assets/js/main.js"></script>	
 </body>
 </html>

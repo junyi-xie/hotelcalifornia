@@ -1,5 +1,5 @@
 <?php
-require 'class.php';
+require '../private/class.php';
 
 echo 'welcome to the page of room with ID' . $_GET['id'];
 
@@ -21,7 +21,7 @@ echo 'welcome to the page of room with ID' . $_GET['id'];
 <label for="start date">startdate</label>
 <input type="date" min="<?php echo date('Y-m-d')?>" name="start_date" placeholder="start_date">
 <label for="start date">end date</label>
-<input type="date" min="<?php echo date('Y-m-d')?>" name="end_date" placeholder="end_date">
+<input type="date" min="<?php echo date('Y-m-d', strtotime(' +1 day'))?>" name="end_date" placeholder="end_date">
 
 <input type="hidden" name="test" value="<?php echo $_GET['id']?>">
 

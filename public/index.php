@@ -1,11 +1,3 @@
-<?php
-require 'class.php';
-
-$rooms = "SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id ORDER BY room_id";
-$rooms_stmt = $db->pdo->query($rooms);
-$rooms_results = $rooms_stmt->fetchAll();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,27 +8,14 @@ $rooms_results = $rooms_stmt->fetchAll();
 	<script src="https://kit.fontawesome.com/b57a0b7ac6.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <div class="container p-3">
-        welcome to best hotel!
-
-        <?php foreach ($rooms_results as $room):?>
-            <ul class="list-group mt-5">
-                <li class="list-group-item">Room id: <?=$room['room_id']?></li>
-                <li class="list-group-item">Room name: <?=$room['room_name']?></li>
-                <li class="list-group-item"> Room price: &euro;<?=$room['room_price']?></li>
-                <li class="list-group-item">Room number: <?=$room['room_number']?></li>
-                <li class="list-group-item">Room floor: <?=$room['room_floor']?></li>
-                <li class="list-group-item">Room category: <?=$room['category_name']?></li>
-                <li class="list-group-item">Room description: <?=$room['room_description']?></li>
-                <li class="list-group-item"><a href="book.php?id=<?=$room['room_id']?>">view room</a></li>
-            </ul>
-        <?php endforeach; ?>
     
+    <div class="container text-center pt-3">
+        <h2>Welcome to Hotel California!</h2>
+
+        <div class="wrapper">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis neque tenetur et fugit omnis dolorum accusamus ex cumque, temporibus impedit nam soluta doloribus dolorem tempore ea magni inventore eaque minus!
+        </div>
     </div>
-    
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
 </body>
 </html>
