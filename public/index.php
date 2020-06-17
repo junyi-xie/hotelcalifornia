@@ -8,7 +8,7 @@
 </head>
 <body>
     
-<div class="container text-center pt-3">
+<div class="container text-center p-5">
     <h2>Welcome to Hotel California!</h2>
     <p>Choose which room type you would like to book!</p>
 
@@ -19,6 +19,9 @@
             <li class="list-inline-item"><a href="category.php?categoryid=3">Family Room</a></li>
             <li class="list-inline-item"><a href="category.php?categoryid=4">Apartment Room</a></li>
         </ul>
+        <main class="pt-5">
+            <a href="../private/signin.php">Admin Panel</a>
+        </main>
     </div>
 </div>
 

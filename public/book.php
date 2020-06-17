@@ -365,6 +365,11 @@ if (isset($_POST['submit']))
                 {
                     echo $_SESSION['book'];
                     unset($_SESSION['book']);
+                } 
+                elseif (isset($_SESSION['customer']))
+                {
+                    echo $_SESSION['customer'];
+                    unset($_SESSION['customer']);
                 }
             ?>
         </main>

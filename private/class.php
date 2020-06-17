@@ -260,6 +260,11 @@ class Database
         $stmt->execute();
         return true;
     }
+
+    public function printinvoice()
+    {
+        // the print in voice function. export to pdf or execel probably.
+    }
 }
 
 $db = new Database('localhost','root','','hotelcalifornia');

@@ -138,7 +138,7 @@ $num_reservation = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 					<tr>
 						<td><?=$reservation['reservation_id']?></td>
 						<td><?=$reservation['customer_first_name']?>&nbsp;<?=$reservation['customer_last_name']?></td>
-						<td><?=$reservation['room_id']?></td>
+						<td><a href="update.php?id=<?=$reservation['room_id']?>"><?=$reservation['room_id']?></a></td>
 						<td><?=$reservation['room_name']?></td>
 						<td><?=$reservation['reservation_start']?></td>
 						<td><?=$reservation['reservation_end']?></td>	
