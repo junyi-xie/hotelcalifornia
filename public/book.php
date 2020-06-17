@@ -1,11 +1,6 @@
 <?php
 require '../private/class.php';
 
-$stmt = $db->pdo->prepare("SELECT * FROM categories INNER JOIN rooms ON categories.category_id = rooms.category_id WHERE room_id = :room_id");
-$stmt->bindParam(':room_id', $_GET['id']);
-$stmt->execute();
-$results = $stmt->fetch(PDO::FETCH_ASSOC);
-
 if (isset($_POST['submit']))
 {
     $first_name = $_POST['firstname'];
@@ -17,6 +12,22 @@ if (isset($_POST['submit']))
     $telephone = $_POST['telephone'];
     $email = $_POST['email'];
     $db->addcustomer($first_name, $last_name, $address, $zip, $city, $country, $telephone, $email);
+
+    if ($_SESSION['customer'] == 'Customer has been added!')
+    {
+    $stmt = $db->pdo->prepare("SELECT * FROM customers where customer_telephone = :customer_telephone AND customer_email = :customer_email ");
+    $stmt->bindParam(':customer_telephone', $telephone);
+    $stmt->bindParam(':customer_email', $email);
+    $stmt->execute();
+    $results = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $reservation_start_date = $_POST['check_in'];
+    $reservation_end_date = $_POST['check_out']; 
+    $customer_id = $results['customer_id'];
+    $room_id = $_POST['room_id'];
+
+    $db->bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id);
+    } 
 }
 ?>
 
@@ -33,44 +44,57 @@ if (isset($_POST['submit']))
 
     <div class="container">
         <main class="p-3 text-center">
-            <h2>Customer Detail</h2>
+            <h2>Booking Details</h2>
+            <a href="index.php">Home</a>
         </main>
 
         <form method="post">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputFirstName">First Name *</label>
-                    <input type="text" class="form-control"  id="inputFirstName" name="firstname" maxlength="100" placeholder="Input first name...">
+                    <input type="text" class="form-control"  id="inputFirstName" name="firstname" maxlength="100" placeholder="Input first name..." required>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="inputLastName">Last Name *</label>
-                    <input type="text" class="form-control" id="inputLastName" name="lastname" maxlength="100" placeholder="Input last name...">
+                    <input type="text" class="form-control" id="inputLastName" name="lastname" maxlength="100" placeholder="Input last name..." required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputEmail">Email *</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email" maxlength="150" placeholder="Input email...">
+                    <input type="email" class="form-control" id="inputEmail" name="email" maxlength="150" placeholder="Input email..." required>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="inputTelephone">Telephone *</label>
-                    <input type="tel"  class="form-control" id="inputTelephone" name="telephone" maxlength="15" pattern="[0-9]{10}" placeholder="Input telephone...">
+                    <input type="tel"  class="form-control" id="inputTelephone" name="telephone" maxlength="15" pattern="[0-9]{10}" placeholder="Input telephone..." required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCheckIn">Check In *</label>
+                    <input type="date" class="form-control" id="inputCheckIn" min="<?php echo date('Y-m-d')?>" name="check_in" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputCheckOut">Check Out *</label>
+                    <input type="date" class="form-control" id="inputCheckOut" min="<?php echo date('Y-m-d')?>" name="check_out" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="inputAddress">Address *</label>
-                <input type="text" class="form-control" id="inputAddress" name="address" maxlength="50" placeholder="Input address...">
+                <input type="text" class="form-control" id="inputAddress" name="address" maxlength="50" placeholder="Input address..." required>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputCountry">Country *</label>
-                    <select class="form-control" id="inputCountry" name="country">
-                        <option selected disabled>Select...</option>
+                    <select class="form-control" id="inputCountry" name="country" required>
+                        <option value="" selected disabled>Select...</option>
                         <option value="Afghanistan">Afghanistan</option>
                         <option value="Åland Islands">Åland Islands</option>
                         <option value="Albania">Albania</option>
@@ -320,28 +344,33 @@ if (isset($_POST['submit']))
 
                 <div class="form-group col-md-4">
                     <label for="inputState">City *</label>
-                    <input type="text" class="form-control" id="inputCity" name="city" maxlength="150" placeholder="Input city...">
+                    <input type="text" class="form-control" id="inputCity" name="city" maxlength="150" placeholder="Input city..." required>
                 </div>
 
                 <div class="form-group col-md-2">
                     <label for="inputZip">Zip *</label>
-                    <input type="text" class="form-control" id="inputZip" name="zip" maxlength="10" placeholder="Input zip...">
+                    <input type="text" class="form-control" id="inputZip" name="zip" maxlength="10" placeholder="Input zip..." required>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit">Submit</button>
+
+            <input type="hidden" name="room_id" value="<?php echo $_GET['id']?>">
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block" name="submit">Book Room</button>
+
         </form>
 
-        <main class="p-2 text-center">
-            <?php if (isset($_SESSION['add_customer'])):
-                echo $_SESSION['add_customer'];
-                unset($_SESSION['add_customer']);
-            endif; ?>
-        </main>
-        
-        <main class="text-center">
-            <a class="btn btn-primary" href="room.php?id=<?=$results['room_id']?>">Return</a>
+        <main class="text-center pt-2">
+            <?php
+                if (isset($_SESSION['book'])) 
+                {
+                    echo $_SESSION['book'];
+                    unset($_SESSION['book']);
+                }
+            ?>
         </main>
 
+       
+        
     </div>
 
 </body>

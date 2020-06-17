@@ -29,7 +29,8 @@ table tbody tr:hover {
 }
 
 table tbody tr:hover td.actions .edit, 
-table tbody tr:hover td.actions .delete {
+table tbody tr:hover td.actions .delete,
+table tbody tr:hover td.actions .print {
     color: #ffffff;
 }
 
@@ -54,7 +55,8 @@ table tbody tr td.actions {
 }
 
 table tbody tr td.actions .edit,
-table tbody tr td.actions .delete {
+table tbody tr td.actions .delete,
+table tbody tr td.actions .print {
     text-decoration: none;
     color: #494ca2;
 }

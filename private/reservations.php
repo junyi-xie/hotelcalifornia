@@ -124,12 +124,12 @@ $num_reservation = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 				<thead>
 					<tr>
 						<td>#</td>
-						<td>Start Date</td>
-						<td>End Date</td>
-						<td>Customer Identity</td>
 						<td>Customer Name</td>
 						<td>Room Identity</td>
 						<td>Room Name</td>
+						<td>Check In</td>
+						<td>Check Out</td>
+						<td>Action</td>
 					</tr>
 				</thead>
 
@@ -137,12 +137,12 @@ $num_reservation = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 					<?php foreach ($results as $reservation): ?>
 					<tr>
 						<td><?=$reservation['reservation_id']?></td>
-						<td><?=$reservation['reservation_start']?></td>
-						<td><?=$reservation['reservation_end']?></td>
-						<td><?=$reservation['customer_id']?></td>
 						<td><?=$reservation['customer_first_name']?>&nbsp;<?=$reservation['customer_last_name']?></td>
 						<td><?=$reservation['room_id']?></td>
-						<td><?=$reservation['room_name']?></td>	
+						<td><?=$reservation['room_name']?></td>
+						<td><?=$reservation['reservation_start']?></td>
+						<td><?=$reservation['reservation_end']?></td>	
+						<td class="actions"><a href="#" class="print"><i class="fas fa-print mr-2"></i>Print</a></td>
 					</tr>
 					<?php endforeach;?>
 				</tbody>

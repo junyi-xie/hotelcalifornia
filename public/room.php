@@ -17,22 +17,20 @@ $results = $stmt->fetch(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="card text-center mt-3">
-        <div class="card-header">
-            Room Type: <?php echo $results['category_name'];?>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title"><?php echo $results['room_name'];?></h5>
-            <p class="card-text"><?php echo $results['room_description'];?></p>
-            <a class="btn btn-primary" href="book.php?id=<?php echo $_GET['id'];?>">Book Room</a>
-        </div>
-        <div class="card-footer text-muted">
-            Room Details: Floor <?php echo $results['room_floor'];?>, Number <?php echo $results['room_number'];?>, &euro;<?php echo $results['room_price'];?>
-            <br/>
-            <a class="btn btn-primary mt-2" href="category.php?categoryid=<?php echo $results['category_id']?>">Return</a>
-        </div>
-    </div>
+<div class="container p-3">
+    <main class="text-center">
+        <h2>Room Detail:</h2>
+    </main>
+
+    <ul class="list-group list-group-horizontal justify-content-center text-center">
+        <li class="list-group-item"><b>Room Type</b><br><?php echo $results['category_name'];?></li>
+        <li class="list-group-item"><b>Room Name</b><br><?php echo $results['room_name'];?></li>
+        <li class="list-group-item"><b>Room Number</b><br><?php echo $results['room_number'];?></li>
+        <li class="list-group-item"><b>Room Floor</b><br><?php echo $results['room_floor'];?></li>
+        <li class="list-group-item"><b>Room Price</b><br>&euro;<?php echo $results['room_price'];?></li>
+        <li class="list-group-item"><b>Book Room</b><br><a href="book.php?id=<?php echo $_GET['id'];?>">Link</a></li>
+        <li class="list-group-item"><b>Return</b><br><a href="category.php?categoryid=<?php echo $results['category_id']?>">Link</a></li>
+    </ul>
 </div>
     
 </body>

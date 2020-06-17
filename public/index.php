@@ -10,6 +10,7 @@
     
 <div class="container text-center pt-3">
     <h2>Welcome to Hotel California!</h2>
+    <p>Choose which room type you would like to book!</p>
 
     <div class="wrapper">
         <ul class="list-inline">

@@ -158,15 +158,15 @@ class Database
         // duplicate check to make sure no duplicate records exist in database
         if($select->rowCount() > 0):
             // when the select query selected something from database there is duplicate and  code will not continue
-            return $_SESSION['add_customer'] = 'Customer already exists!';
+            return $_SESSION['customer'] = 'Customer already exists!';
         else:
             // executing the query if no results return from the select query
             if($stmt->execute() ):
                 // return true when finished
-                return $_SESSION['add_customer'] = 'Customer has been added!';
+                return $_SESSION['customer'] = 'Customer has been added!';
             else:
-                // error message when failedßß
-                return $_SESSION['add_customer'] = 'ERROR';
+                // error message when failed 
+                return $_SESSION['customer'] = 'ERROR!';
             endif; 
         endif;     
     }
@@ -212,7 +212,6 @@ class Database
         // preparing the insert statement, does not execute it yet
         $stmt = $this->pdo->prepare("INSERT INTO reservations (reservation_start, reservation_end, customer_id, room_id) VALUES (:start_date, :end_date, :customer_id, :room_id)");
 
-        echo $lastID = $this->pdo->lastInsertId();
         // binding the params of the placeholders in the query
         $stmt->bindParam(':start_date', $reservation_start_date);
         $stmt->bindParam(':end_date', $reservation_end_date);
@@ -222,15 +221,15 @@ class Database
         // checks if the select query returns something
         if($select->rowCount() > 0):
             // returned query is above 0 and there is a duplicate
-            return 'room already booked';
+            return $_SESSION['book'] = 'Room is already booked!';
         else:
             // execute the query
             if($stmt->execute()):
                 // successful and room has been booked
-                return 'room has been booked';
+                return $_SESSION['book'] = 'Room has been booked!';
             else:
                 // error code
-                return 'error';
+                return $_SESSION['book'] = 'ERROR!';
             endif; 
         endif;   
     }

@@ -105,7 +105,9 @@ if(!$db->loggedin())
 
   		<div id="content" class="p-4 p-md-5 pt-5">
 
-            <h2>Location!</h2>
+			<h2>Location!</h2>
+			
+			<!-- wip -->
 
 		    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae ea est praesentium cupiditate necessitatibus natus aliquam soluta exercitationem ipsum illo id possimus quasi doloribus, neque ipsa, a aut vero itaque.</p>
 		    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae ea est praesentium cupiditate necessitatibus natus aliquam soluta exercitationem ipsum illo id possimus quasi doloribus, neque ipsa, a aut vero itaque.</p>
