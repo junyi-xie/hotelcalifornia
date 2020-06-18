@@ -287,7 +287,7 @@ class Database
                 
                 // limiter
                 $limiter = ",";
-                $filename = "invoice-data-" . date('Y/m/d') . ".csv"; // Create file name
+                $filename = "invoice_data_" . date('Y/m/d') . ".csv"; // Create file name
              
                 // create a file pointer
                 $fopen = fopen('php://memory', 'w'); 
