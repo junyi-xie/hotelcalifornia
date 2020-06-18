@@ -378,8 +378,16 @@ if (isset($_POST['submit']))
             <?php
                     unset($_SESSION['customer']);
                     unset($_SESSION['book']);
-                } else {
-                    echo 'TRY AGAIN. ERROR!';
+                } 
+                    elseif (isset($_SESSION['customer'])) 
+                {
+                    echo $_SESSION['customer'];
+                    unset($_SESSION['customer']);
+                } 
+                    elseif (isset($_SESSION['book']))
+                {
+                    echo $_SESSION['book'];
+                    unset($_SESSION['book']);
                 }
             ?>
         </main>
