@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 16, 2020 at 02:02 PM
--- Server version: 10.4.10-MariaDB
--- PHP Version: 7.3.12
+-- Host: 127.0.0.1
+-- Generation Time: Jun 18, 2020 at 02:41 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -57,7 +57,7 @@ CREATE TABLE `customers` (
   `customer_zip_code` varchar(10) NOT NULL,
   `customer_city` varchar(150) NOT NULL,
   `customer_country` varchar(150) NOT NULL,
-  `customer_telephone` varchar(15) NOT NULL,
+  `customer_telephone` int(11) NOT NULL,
   `customer_email` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -66,15 +66,43 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `customer_first_name`, `customer_last_name`, `customer_address`, `customer_zip_code`, `customer_city`, `customer_country`, `customer_telephone`, `customer_email`) VALUES
-(1, 'Jun Yi', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636560377', 'yunyi.xie@outlook.com'),
-(2, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '647185812', '6009569@mborijnland.nl'),
-(3, 'Appel', 'Banaan', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636424124', 'yunyitec21@gmail.com'),
-(4, 'Banaan', 'Appelboom', 'Appelstraat 1', '8419IP', 'Amsterdam', 'Netherlands', '674142124', 'kouhie123@gmail.com'),
-(5, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', '636560347', 'yunyi.xie11@outlook.com'),
-(6, 'appww', 'rrurw', '2121ew', '321w', 'den haag', 'nederland', '612322333', 'bob@email.nl'),
-(7, 'bobby', 'bobsonb', 'bobadres', '4912QE', 'bobcity', 'nederland', '647412842', 'bob.bobbby.bob@email.com'),
-(8, 'appel boom', 'aaaaaaaaaaaar', 'aapelstraat', '4914RQ', 'den haag', 'nederland', '683712941', 'appelbooom@email.com'),
-(9, 'Yun', 'Xie', 'Neherkade 2178', '2521 RM', 'city', 'Niger', '636560323', 'yunyi.xie441@outlook.com');
+(1, 'Jun Yi', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636560377, 'yunyi.xie@outlook.com'),
+(2, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 647185812, '6009569@mborijnland.nl'),
+(3, 'Appel', 'Banaan', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636424124, 'yunyitec21@gmail.com'),
+(4, 'Banaan', 'Appelboom', 'Appelstraat 1', '8419IP', 'Amsterdam', 'Netherlands', 674142124, 'kouhie123@gmail.com'),
+(5, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636560347, 'yunyi.xie11@outlook.com'),
+(6, 'appww', 'rrurw', '2121ew', '321w', 'den haag', 'nederland', 612322333, 'bob@email.nl'),
+(7, 'bobby', 'bobsonb', 'bobadres', '4912QE', 'bobcity', 'nederland', 647412842, 'bob.bobbby.bob@email.com'),
+(8, 'appel boom', 'aaaaaaaaaaaar', 'aapelstraat', '4914RQ', 'den haag', 'nederland', 683712941, 'appelbooom@email.com'),
+(9, 'bobby', 'jogn', 'appelstraat 841', '7471RP', 'rotterdam', 'africa', 612345678, 'africa@test.com'),
+(10, 'john', 'smith', 'jogn smith street', '4844rj', 'den bosch', 'croatia', 123456789, 'johnsmith@email.com'),
+(11, 'smithy', 'gin', 'addres 123', '4812', 'some city', 'Bahrain', 637417472, 'gin42@email.com'),
+(12, 'Jun', '44', '214124', '2521 RM', 'The Hague', 'Netherlands', 637474712, 'r@gmail.com'),
+(13, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 636560371, 'yunyi.xi444e@outlook.com'),
+(14, 'Sarah', 'Smithy', 'larohp 412', '4813rm', 'rotterdam', 'Gabon', 612354423, 'sarah.smithy@gmail.com'),
+(15, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 617494914, 'yunyi.xie@outlook.com412412'),
+(16, 'Jun', '44', '214124', '2521 RM', 'The Hague', 'Netherlands', 637474710, 'rrwr@gmail.com'),
+(17, 'Alli', 'Baba', 'appel ali straat 5', '2741 oa', 'den haag', 'Netherlands', 612847274, 'alibaba@email.com'),
+(18, 'alibaba', 'mohhamed', 'ufrrrrhr strat123', '4717rw', 'city something', 'Bahamas', 646473631, 'irjr@email.com'),
+(19, 'Jun', 'Xie', 'Neherkade 2178', '2521 RM', 'The Hague', 'Netherlands', 684718484, 'yunyi.xie5542141424@outlook.com'),
+(20, 'allah a', 'akbar', 'marrokohn', '4124rw', 'gouda', 'Bahamas', 684828482, 'allahakbar123@gmail.com'),
+(21, 'appelmoest', 'taart', 'appelmoest straat 5', '4758wo', 'somewhere', 'Gambia', 684837947, 'appelmoestaart@email.com'),
+(22, 'kon', 'sahha', 'appelstraat 888', '7574rm', 'city', 'Palau', 677787988, 'konsahha@email.com'),
+(23, 'jhonny', 'gyro', 'something', '4648re', 'some city', 'Ethiopia', 647484843, 'gyro@email.com'),
+(24, 'someting', 'something', 'some adress', '4424ed', 'some city', 'Bangladesh', 678787988, 'tes44t@email.com'),
+(25, 'kalalao', 'dkakak', 'adresss 949', '8574ws', 'some city test', 'Honduras', 692890987, 'kakal@email.com'),
+(26, 'John', 'Johnson', 'John Street 6', '4444OP', 'Somewhere', 'Guernsey', 699955999, 'JohnJohnson@gmail.com'),
+(27, 'Jennifer', 'Lopez', 'some street', '4444az', 'some city', 'Barbados', 688848555, 'jenniferlopez@email.com'),
+(28, 'test', 'tesst', 'test', 'test', 'test', 'Bahrain', 611111111, 'test123@email.com'),
+(29, 'test', 'test', 'test4', 'test5', 'test', 'Bahamas', 699999999, 'testt55@gmail.com'),
+(30, 'testttt', 'test', 'test', 'test', 'test', 'Bahrain', 688877666, 'test888@email.com'),
+(31, 'Jun', '44', '214124', '2521 RM', 'The Hague', 'Netherlands', 2147483647, '4444@gmail.com'),
+(32, 'johan', 'test', 'test4', 'test', 'test', 'Taiwan, Province of China', 612399999, 'testjohn@email.com'),
+(33, 'hii', 'hii', 'hii', '77', 'hii', 'Haiti', 677777777, 'hii@email.com'),
+(34, 'test', 'test', 'test', 'test', 'test', 'Azerbaijan', 688846777, 'appeltest@email.com'),
+(35, 'appel io', 'it', 'testt', 'test', 'test', 'Syrian Arab Republic', 677853512, 'rio@email.com'),
+(36, 'test', 'appel', 'test', 'test', 'test', 'Armenia', 699755473, 'testappel55@gmail.com'),
+(37, 'jun', 'test', 'te', 'tes4', 'te', 'Azerbaijan', 678742421, 'juntest@email.com');
 
 -- --------------------------------------------------------
 
@@ -96,7 +124,38 @@ CREATE TABLE `reservations` (
 
 INSERT INTO `reservations` (`reservation_id`, `reservation_start`, `reservation_end`, `customer_id`, `room_id`) VALUES
 (1, '2020-06-19', '2020-06-20', 6, 30),
-(11, '2020-06-20', '2020-06-19', 8, 14);
+(2, '2020-06-16', '2020-06-13', 10, 10),
+(3, '2020-08-20', '2020-08-29', 26, 24),
+(4, '2020-08-27', '2020-09-25', 20, 37),
+(5, '2020-08-31', '2020-09-16', 10, 14),
+(6, '2020-06-17', '2020-06-30', 3, 41),
+(7, '2020-07-21', '2020-08-21', 30, 6),
+(8, '2020-07-09', '2020-07-30', 33, 24),
+(9, '2020-08-11', '2020-08-21', 26, 10),
+(10, '2020-06-19', '2020-06-27', 32, 5),
+(11, '2020-06-20', '2020-06-19', 8, 14),
+(12, '2020-06-16', '2020-06-15', 1, 1),
+(13, '2020-06-23', '2020-06-28', 37, 28),
+(14, '2020-06-17', '2020-06-18', 17, 31),
+(15, '2020-07-04', '2020-07-11', 18, 31),
+(16, '2020-07-01', '2020-07-02', 19, 31),
+(17, '2020-06-18', '2020-06-26', 20, 3),
+(18, '2020-07-01', '2020-07-11', 21, 1),
+(19, '2020-07-01', '2020-07-02', 22, 2),
+(20, '2020-07-01', '2020-07-01', 23, 2),
+(21, '2020-07-11', '2020-07-28', 25, 2),
+(22, '2020-06-18', '2020-06-19', 26, 34),
+(23, '2020-06-19', '2020-06-22', 27, 44),
+(24, '2020-06-19', '2020-07-03', 28, 31),
+(25, '2020-06-26', '2020-07-10', 29, 12),
+(26, '2020-07-11', '2020-08-04', 30, 12),
+(27, '2020-07-04', '2020-06-30', 32, 12),
+(28, '2020-10-01', '2020-10-20', 33, 12),
+(29, '2020-12-31', '2020-12-31', 34, 12),
+(30, '2020-07-08', '2020-07-11', 35, 12),
+(31, '2020-08-06', '2020-08-26', 16, 19),
+(32, '2020-06-19', '2020-06-19', 37, 30),
+(33, '2020-07-14', '2020-07-15', 21, 22);
 
 -- --------------------------------------------------------
 
@@ -119,7 +178,7 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`room_id`, `room_name`, `room_price`, `room_number`, `room_floor`, `category_id`, `room_description`) VALUES
-(1, 'Appel #1', '111.00', 111, 1, 1, 'New appel test 2'),
+(1, 'Appel #1', '111.00', 111, 3, 1, 'New appel test 2'),
 (2, 'Solo Room v2', '299.00', 1, 2, 3, 'new desc for test 2'),
 (3, 'Double Room v1', '699.00', 1, 3, 2, 'tetete lorem'),
 (4, 'Double Room v2', '159.00', 2, 4, 2, 'teaett'),
@@ -133,9 +192,11 @@ INSERT INTO `rooms` (`room_id`, `room_name`, `room_price`, `room_number`, `room_
 (12, 'lorem ipsum room 22', '411.00', 5, 9, 2, 'lreorjqwrq lorem '),
 (13, 'ioaorqwr', '2412.00', 12, 4, 1, '1241 COFFAAEE'),
 (14, 'Test banaan #14', '14.00', 14, 4, 4, 'kamer 14 test'),
+(15, 'Room #15', '993.00', 702, 7, 4, 'test lorem'),
 (16, 'expensie room', '99999.00', 422, 4, 3, 'really expensive'),
 (17, 'cheap room', '999.00', 12234, 7, 3, '55 room family'),
 (18, 'test 22 room', '4122.00', 222, 2, 2, '22 mummber 2'),
+(19, 'Room #19', '677.00', 701, 7, 4, 'lorem test lorem'),
 (20, 'ooo 9', '499.00', 981, 4, 1, '41242 981 room number'),
 (21, 'nummber 144', '4914.00', 14, 5, 1, 'room number 14 test lorem'),
 (22, 'caoc v1', '41144.00', 97, 8, 3, 'msan ac pellentesque quis, ultricies a risus'),
@@ -143,8 +204,9 @@ INSERT INTO `rooms` (`room_id`, `room_name`, `room_price`, `room_number`, `room_
 (24, 'hio edray', '44.00', 41, 1, 2, ' a risus. Fusce nec aucto'),
 (25, 'nrjqiwiq NEWASA', '12311.00', 42, 9, 2, 'loremLorem ipsum dolor sit amet, '),
 (26, '5rwr test baana', '44.00', 912, 2, 3, 'somethign room'),
-(27, 'Best Room', '12.00', 111, 9, 2, 'best room lorem ipsum qqqqqqqqqqq'),
-(28, 'lorem111', '3341.00', 11, 2, 4, 'lorem lorem appel 1112 best room cheap etc eeccaa'),
+(27, 'Best Room', '12.00', 111, 9, 2, 'best room lorem ipsr'),
+(28, 'Room #28', '333.00', 902, 9, 4, 'testsat'),
+(29, 'Room #29', '212.00', 901, 9, 4, 'lorem testt'),
 (30, 'test room', '1.00', 433, 1, 1, 'lorem test'),
 (31, 'room name #111111', '123.00', 33, 3, 4, 'apartment room desc'),
 (32, 'new room test', '1338.00', 43, 6, 1, 'room test test'),
@@ -158,7 +220,8 @@ INSERT INTO `rooms` (`room_id`, `room_name`, `room_price`, `room_number`, `room_
 (40, 'room seventh #2', '777.00', 702, 7, 2, 'new room again for floor seven'),
 (41, 'room #778', '117.00', 703, 7, 2, 'room #778'),
 (42, 'room #779', '555.00', 704, 7, 3, 'a desc test'),
-(43, 'room 780', '777.00', 705, 7, 3, 'this is good desc');
+(43, 'room 780', '777.00', 705, 7, 3, 'this is good desc'),
+(44, 'new room for test', '4999.00', 801, 8, 2, 'new room test');
 
 -- --------------------------------------------------------
 
@@ -231,19 +294,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `users`
