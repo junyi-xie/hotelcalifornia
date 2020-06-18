@@ -28,8 +28,8 @@ $results = $stmt->fetch(PDO::FETCH_ASSOC);
         <li class="list-group-item"><b>Room Number</b><br><?php echo $results['room_number'];?></li>
         <li class="list-group-item"><b>Room Floor</b><br><?php echo $results['room_floor'];?></li>
         <li class="list-group-item"><b>Room Price</b><br>&euro;<?php echo $results['room_price'];?></li>
-        <li class="list-group-item"><b>Book Room</b><br><a href="book.php?id=<?php echo $_GET['id'];?>">Link</a></li>
-        <li class="list-group-item"><b>Return</b><br><a href="category.php?categoryid=<?php echo $results['category_id']?>">Link</a></li>
+        <li class="list-group-item"><b>Link</b><br><a href="book.php?id=<?php echo $_GET['id'];?>">Book Room</a></li>
+        <li class="list-group-item"><b>Link</b><br><a href="category.php?categoryid=<?php echo $results['category_id']?>">Go Back</a></li>
     </ul>
 </div>
     

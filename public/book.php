@@ -27,6 +27,16 @@ if (isset($_POST['submit']))
     $room_id = $_POST['room_id'];
 
     $db->bookreservation($reservation_start_date, $reservation_end_date, $customer_id, $room_id);
+
+        if ($_SESSION['book'] == 'Room has been booked!')
+        {
+            $sto = $db->pdo->prepare("SELECT * FROM reservations WHERE reservation_start =:start_date AND reservation_end =:end_date AND room_id =:room_id");
+            $sto->bindParam(':start_date', $_POST['check_in']);
+            $sto->bindParam(':end_date', $_POST['check_out']);
+            $sto->bindParam(':room_id', $_POST['room_id']);
+            $sto->execute();
+            $output = $sto->fetch(PDO::FETCH_ASSOC);
+        }
     } 
 }
 ?>
@@ -361,15 +371,15 @@ if (isset($_POST['submit']))
 
         <main class="text-center pt-2">
             <?php
-                if (isset($_SESSION['book'])) 
+                if (isset($_SESSION['book']) == 'Room has been booked!') 
                 {
-                    echo $_SESSION['book'];
-                    unset($_SESSION['book']);
-                } 
-                elseif (isset($_SESSION['customer']))
-                {
-                    echo $_SESSION['customer'];
+            ?>
+                    <span>View your invoice <a href="../private/export.php?export=true&id=<?=$output['reservation_id']?>">here</a>.</span>
+            <?php
                     unset($_SESSION['customer']);
+                    unset($_SESSION['book']);
+                } else {
+                    echo 'TRY AGAIN. ERROR!';
                 }
             ?>
         </main>

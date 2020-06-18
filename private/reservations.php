@@ -141,8 +141,8 @@ $num_reservation = $db->pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
 						<td><a href="update.php?id=<?=$reservation['room_id']?>"><?=$reservation['room_id']?></a></td>
 						<td><?=$reservation['room_name']?></td>
 						<td><?=$reservation['reservation_start']?></td>
-						<td><?=$reservation['reservation_end']?></td>	
-						<td class="actions"><a href="#" class="print"><i class="fas fa-print mr-2"></i>Print</a></td>
+						<td><?=$reservation['reservation_end']?></td>
+						<td class="actions"><a href="export.php?export=true&id=<?=$reservation['reservation_id']?>" class="print"><i class="fas fa-print mr-2"></i>Print</a></td>
 					</tr>
 					<?php endforeach;?>
 				</tbody>

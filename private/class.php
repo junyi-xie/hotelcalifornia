@@ -253,8 +253,18 @@ class Database
         return true;
     }
 
+    public function removecategory($category_id)
+    {
+        // remove a category where the id equals to the id given in the function
+        $stmt = $this->pdo->prepare("DELETE FROM categories WHERE category_id = :category_id");
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->execute();
+        return true;
+    }
+
     public function showroombycategory($category_id)
     {
+        // select all the room by category type
         $stmt = $this->pdo->prepare("SELECT * FROM rooms WHERE category_id = :category_id");
         $stmt->bindParam(':category_id', $category_id);
         $stmt->execute();
@@ -263,7 +273,46 @@ class Database
 
     public function printinvoice()
     {
-        // the print in voice function. export to pdf or execel probably.
+        // get function to get the link
+        if(isset($_GET['export'])){
+            // if get export equals to true then following code will run
+            if($_GET['export'] == 'true'){
+        
+                // select the data from db which are needed for the execel file
+                $stmt = $this->pdo->prepare("SELECT * FROM reservations INNER JOIN rooms ON rooms.room_id = reservations.room_id INNER JOIN customers ON customers.customer_id = reservations.customer_id  WHERE reservation_id = :reservation_id");
+                $stmt->bindParam(':reservation_id', $_GET['id']);
+                $stmt->execute();
+                // fetchall for the foreach loop later
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                // limiter
+                $limiter = ",";
+                $filename = "invoice-data-" . date('Y/m/d') . ".csv"; // Create file name
+             
+                // create a file pointer
+                $fopen = fopen('php://memory', 'w'); 
+        
+                // head
+                $head = array('ID', 'First Name', 'Last Name', 'Check In', 'Check Out', 'Room Name', 'Room Price', 'Room Number', 'Room Floor', 'Category', 'Description', 'Address', 'Zip', 'City', 'Country', 'Telephone', 'Email');
+                fputcsv($fopen, $head, $limiter);
+             
+                // output each row of the data, format line as csv and write to file pointer
+                foreach ($results as $row) {   
+                    $data = array($row['reservation_id'], $row['customer_first_name'], $row['customer_last_name'], $row['reservation_start'], $row['reservation_end'], $row['room_name'], $row['room_price'], $row['room_number'], $row['room_floor'], $row['category_id'], $row['room_description'], $row['customer_address'], $row['customer_zip_code'], $row['customer_city'], $row['customer_country'], $row['customer_telephone'], $row['customer_email']);
+                    fputcsv($fopen, $data, $limiter,);
+                }
+             
+                // move back to beginning of file
+                fseek($fopen, 0);
+             
+                // set headers to download file rather than displayed
+                header('Content-Type: text/csv');
+                header('Content-Disposition: attachment; filename="' . $filename . '";');
+             
+                // output all remaining data on a file pointer
+                fpassthru($fopen);
+            }
+        }
     }
 }
 
